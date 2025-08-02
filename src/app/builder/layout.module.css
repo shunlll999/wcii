@@ -1,0 +1,61 @@
+.layout {
+  --gray-lt-rgb: 0, 0, 0;
+  --gray-lt-alpha-200: rgba(var(--gray-lt-rgb), 0.08);
+  --gray-lt-alpha-100: rgba(var(--gray-lt-rgb), 0.05);
+  --primary-dot: rgba(var(--gray-lt-rgb), 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .layout {
+    --gray-lt-rgb: 255, 255, 255;
+    --gray-lt-alpha-200: rgba(var(--gray-lt-rgb), 0.08);
+    --gray-lt-alpha-100: rgba(var(--gray-lt-rgb), 0.05);
+    --primary-dot: rgba(var(--gray-lt-rgb), 0.2);
+  }
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  padding: 0 16px;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-lt-alpha-200);
+}
+
+.section {
+  display: block;
+  background-color: #00000010;
+  background-image: radial-gradient(
+      circle at center,
+      var(--primary-dot) 1px,
+      transparent 0
+    );
+  background-size: 1.5rem 1.5rem;
+}
+
+.nav {
+  display: block;
+  min-height: calc(100vh - 60px);
+  background-color: var(--gray-lt-alpha-100);
+}
+
+.frame-content {
+  display: block;
+  max-width: 1000px;
+  height: calc(100dvh - 92px);
+  margin: 0 auto;
+  background-color: var(--gray-lt-alpha-100);
+}
+
+.frame-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+}
