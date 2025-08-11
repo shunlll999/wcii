@@ -1,6 +1,9 @@
 import TitleAnimator from "./title-animator";
 
+type Params = Promise<{ slug: string }>;
+
 export const dynamicParams = true;
+
 export async function generateStaticParams() {
   return [
     { slug: 'home-a' },
@@ -8,25 +11,22 @@ export async function generateStaticParams() {
   ];
 }
 
-export async function generateMetadata(props: { params: { slug: string } }) {
-  const { slug } = await Promise.resolve(props.params); // ✅ Force await
+export async function generateMetadata({ params }: { params: Params }) {
+  const { slug } = await params;
   return {
     title: slug.toLocaleUpperCase(),
   };
 }
 
-type Props = {
-  params: {
-    slug: string; // ✅ แก้ให้ตรงกับ generateStaticParams
-  };
+type SlagProps = {
+  params: Params;
 };
 
-
-export default async function Slag({ params }: Props) {
-  const { slug } = await Promise.resolve(params);
+export default async function Slag({ params }: SlagProps) {
+  const { slug } = await params;
   return (
     <div>
-       <TitleAnimator slug={`${slug}`} />
+      <TitleAnimator slug={slug} />
       <div>Hello world {slug}</div>
     </div>
   );
