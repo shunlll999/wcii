@@ -13,6 +13,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "plugins": [
       {
         "name": "next"
@@ -23,6 +25,7 @@
       "@Shared/*": ["./src/shared/*"],
       "@Controllers/*": ["./src/controller/*"],
       "@theme/*": ["./src/theme/*"],
+      "@Inspector/*": ["./src/shared/controllers/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

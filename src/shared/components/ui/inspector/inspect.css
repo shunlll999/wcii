@@ -1,0 +1,35 @@
+.inspector-container {
+  position: absolute;
+  top: 0;
+  right: -300px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: calc(100vh - 60px);
+  background-color: var(--background);
+  padding: 16px;
+  transition: all 0.5s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.inspector-container.open {
+  right: 0;
+}
+
+.props-list {
+  margin-top: 4px;
+}
+
+.methods-list {
+  margin-top: 8px;
+  border-top: 1px solid var(--foreground);
+  padding-top: 4px;
+}
+
+.close-inspector {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  width: 24px !important;
+  height: 24px !important;
+  cursor: pointer;
+}

@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { alpha, styled } from '@mui/material';
+import { alpha, IconButton, styled } from '@mui/material';
 import { SimpleTreeView, TreeItem, treeItemClasses } from '@mui/x-tree-view';
 import IndeterminateCheckBoxRoundedIcon from '@mui/icons-material/IndeterminateCheckBoxRounded';
 import DisabledByDefaultRoundedIcon from '@mui/icons-material/DisabledByDefaultRounded';
@@ -10,7 +10,11 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 import FormatShapesRoundedIcon from '@mui/icons-material/FormatShapesRounded';
 import PhotoSizeSelectActualRoundedIcon from '@mui/icons-material/PhotoSizeSelectActualRounded';
 import TagRoundedIcon from '@mui/icons-material/TagRounded';
-import { navigationController, PresetAction } from '@Controllers/navigation.controller';
+import { navigationController } from '@Controllers/navigation.controller';
+import AddHomeWorkIcon from '@mui/icons-material/AddHomeWork';
+import styles from './navigation.module.css';
+import { inspectorController } from '@Controllers/inspector.controller';
+import { PresetAction } from '@Shared/type';
 
 const CustomTreeItem = styled(TreeItem)(({ theme }) => ({
   [`& .${treeItemClasses.content}`]: {
@@ -52,9 +56,23 @@ function TextIconLabel({ icon, text }: { icon: React.ReactNode; text: string }) 
   );
 }
 
+const onActionContoller = (preset: string) => {
+  inspectorController.onOpenInpsector(true);
+  navigationController.addPreset(preset, PresetAction.ADD);
+}
+
 export const Navigation = () => {
   return (
-    <div>
+    <div className={styles['navigation-container']}>
+      <div className={styles['preset-navigation']}>
+        <IconButton
+          className={styles['preset-add-button']}
+          onClick={() => onActionContoller('image')}
+          aria-label="Add preset"
+        >
+          <AddHomeWorkIcon />
+        </IconButton>
+      </div>
       <SimpleTreeView
       aria-label="customized"
       defaultExpandedItems={['1', '3']}
@@ -73,7 +91,7 @@ export const Navigation = () => {
             <CustomTreeItem itemId="9" label="Child 1" />
             <CustomTreeItem itemId="10" label="Child 2" />
             <TreeItem itemId="11" label={<TextIconLabel icon={<PhotoSizeSelectActualRoundedIcon sx={{ transform: 'scale(0.6)' }} />} text="Image" />} />
-            <TreeItem itemId="12" label={<TextIconLabel icon={<FormatShapesRoundedIcon  sx={{ transform: 'scale(0.6)' }} />} text="Text" />} onClick={() => navigationController.addPreset('text', PresetAction.ADD)} />
+            <TreeItem itemId="12" label={<TextIconLabel icon={<FormatShapesRoundedIcon  sx={{ transform: 'scale(0.6)' }} />} text="Text" />} onClick={() => onActionContoller('text')} />
           </CustomTreeItem>
           <CustomTreeItem itemId="8" label="Hello" />
         </CustomTreeItem>

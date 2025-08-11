@@ -1,16 +1,19 @@
 import { createTheme } from '@mui/material/styles';
 
+const primaryDarkColor = '#ee9c05ff';
+const primaryLightColor = '#66b505ff';
+
 export const getDesignTokens = (mode: 'light' | 'dark') => ({
   palette: {
     mode,
     ...(mode === 'light'
       ? {
-          primary: { main: '#66b505ff' },
+          primary: { main: primaryLightColor },
           background: { default: '#f5f5f5', paper: '#fff' },
           text: { primary: '#000' },
         }
       : {
-          primary: { main: '#ee9c05ff' },
+          primary: { main: primaryDarkColor },
           background: { default: '#121212', paper: '#1d1d1d' },
           text: { primary: '#fff' },
         }),
@@ -30,6 +33,20 @@ export const getDesignTokens = (mode: 'light' | 'dark') => ({
         },
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 5,                // ทำเป็นสี่เหลี่ยม
+          backgroundColor: primaryDarkColor,     // สีพื้นหลัง
+          color: '#fff',                  // สีไอคอน
+          transition: 'background-color 0.3s ease',
+
+          '&:hover': {
+            backgroundColor: '#c76809ff',  // สีพื้นหลังตอน hover
+          },
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
@@ -37,20 +54,20 @@ export const getDesignTokens = (mode: 'light' | 'dark') => ({
             ? {
               '& .MuiOutlinedInput-root': {
                 '&:hover fieldset': {
-                  borderColor: '#66b505ff', // สีตอน hover
+                  borderColor: primaryLightColor, // สีตอน hover
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: '#66b505ff', // สีตอน focus
+                  borderColor: primaryLightColor, // สีตอน focus
                 },
               },
             }
             : {
               '& .MuiOutlinedInput-root': {
                 '&:hover fieldset': {
-                  borderColor: '#ee9c05ff', // สีตอน hover
+                  borderColor: primaryDarkColor, // สีตอน hover
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: '#ee9c05ff', // สีตอน focus
+                  borderColor: primaryDarkColor, // สีตอน focus
                 },
               },
             }),

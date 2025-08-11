@@ -1,8 +1,7 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
-
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
@@ -23,10 +22,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <div>
       <header>Main Layout Header</header>
       <ThemeProvider theme={createAppTheme(mode)}>
-          <CssBaseline /> {/* reset style ของ browser */}
-      <main>{children}</main>
-      <footer>Main Layout Footer</footer>
-       </ThemeProvider>
+        <CssBaseline /> {/* reset style ของ browser */}
+        <main>{children}</main>
+        <footer>Main Layout Footer</footer>
+      </ThemeProvider>
     </div>
-  )
+  );
 }
