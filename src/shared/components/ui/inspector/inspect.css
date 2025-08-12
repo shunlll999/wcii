@@ -1,10 +1,10 @@
 .inspector-container {
   position: absolute;
   top: 0;
-  right: -300px;
+  right: -350px;
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 350px;
   height: calc(100vh - 60px);
   background-color: var(--background);
   padding: 16px;
@@ -20,8 +20,10 @@
 }
 
 .methods-list {
-  margin-top: 8px;
-  border-top: 1px solid var(--foreground);
+  margin-top: 24px;
+  border-top-style: dashed;
+  border-top-color: var(--foreground);
+  border-top-width: 0.1px;
   padding-top: 4px;
 }
 

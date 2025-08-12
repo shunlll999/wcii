@@ -2,38 +2,53 @@
 
 import { useEffect, useRef } from 'react';
 import styles from './layout.module.css';
-import {
-  navigationController,
-} from '@Controllers/navigation.controller';
+import { navigationController } from '@Controllers/navigation.controller';
 import { EVENTS } from '@Shared/constants/event';
 import { inspectorController } from '@Controllers/inspector.controller';
-import type { onDispachType, onEventListener } from '@Shared/type';
+import type { DispatchEventType } from '@Shared/type';
+import { useAppDispatch } from '@Shared/hooks/useAppDispatch';
 
 export default function Builder() {
   const iFrameRef = useRef<HTMLIFrameElement>(null);
-  const handlePresetDispatch = (event: CustomEvent<onDispachType>) => {
-    const { type, payload } = event.detail;
+  const { appController } = useAppDispatch();
+  const handlePresetDispatch = (event: CustomEvent<DispatchEventType>) => {
     if (iFrameRef.current) {
-      const messageData: onEventListener = {
-        event: `${type}-preset`,
-        payload,
+      const messageData: DispatchEventType = {
+       ...event.detail
       };
-      iFrameRef.current.contentWindow?.postMessage(messageData, '*');
+      appController.sendMessage(iFrameRef.current, messageData);
+    }
+  };
+
+  const onReciveveMessage = (data: DispatchEventType) => {
+    if (data.event === EVENTS.ON_INSPECTOR_OPEN) {
+      const command = data.payload.command;
+      let isOpen: boolean | undefined;
+      if (
+        command &&
+        'value' in command &&
+        typeof command.value === 'object' &&
+        command.value !== null
+      ) {
+        isOpen = (command.value as { isOpen?: boolean }).isOpen;
+      }
+      inspectorController.onOpenInpsector(isOpen ?? false, data.payload.preset);
     }
   };
 
   useEffect(() => {
-    navigationController.addPresetListener(EVENTS.ON_BUILDER_DISPATCH, data =>
+    appController.addListener(EVENTS.ON_BUILDER_DISPATCH, data =>
       handlePresetDispatch(new CustomEvent(data.type, { detail: data }))
     );
     if (iFrameRef.current) {
-      iFrameRef.current.contentWindow?.addEventListener('message', event => {
-        if (event.data.event === EVENTS.ON_INSPECTOR_OPEN) {
-          console.log('Inspector Opened:', event.data.payload);
-          inspectorController.onOpenInpsector(event.data.payload.isOpen, event.data.payload.preset);
-        }
-      });
+      appController.receiveMessage(iFrameRef.current, onReciveveMessage);
     }
+    return () => {
+      appController.removeListener(EVENTS.ON_BUILDER_DISPATCH, (data) =>  handlePresetDispatch(new CustomEvent(data.type, { detail: data })));
+      if (iFrameRef.current) {
+        appController.removeListener('message', onReciveveMessage);
+      }
+    };
   }, []);
   return (
     <div>

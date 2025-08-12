@@ -5,11 +5,11 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
 import { useEffect, useState } from 'react';
 import { Inspector } from '@Shared/components/ui/inspector';
-import { Player } from '@Shared/controllers/propsClasses/Player';
+import { ImageCard } from '@Shared/controllers/propsClasses/presets/ImageCard.preset';
 
 export default function BuilderLayout({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const playerInstance = new Player();
+  const imageCardInstance = new ImageCard();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -32,7 +32,7 @@ export default function BuilderLayout({ children }: { children: React.ReactNode 
           </nav>
           <section className={styles.section}>{children}</section>
           <nav>
-            <Inspector instance={playerInstance} />
+            <Inspector instance={imageCardInstance} />
           </nav>
         </main>
       </div>

@@ -1,36 +1,54 @@
-import { EVENTS } from "@Shared/constants/event"
+import { EVENTS } from '@Shared/constants/event';
+import { useAppDispatch } from '@Shared/hooks/useAppDispatch';
+import { DispatchEventType, PresetAction } from '@Shared/type';
+
+const { appController } = useAppDispatch();
 
 const onOpenInpsector = (isOpen: boolean, preset?: string) => {
   if (window) {
-    const customEvent = new CustomEvent(EVENTS.ON_INSPECTOR_OPEN, {
-      detail: { isOpen, preset }
+    appController.sendMessage(window, {
+      event: EVENTS.ON_INSPECTOR_OPEN,
+      type: PresetAction.UPDATE,
+      payload: {
+        preset: preset ?? '',
+        action: PresetAction.UPDATE,
+        command: {
+          control: 'inspector',
+          type: PresetAction.OPEN_INSPECTOR,
+          value: {
+            isOpen,
+          },
+        },
+      },
     });
-    window.document.dispatchEvent(customEvent);
   }
-}
+};
 
-const addInspectorListener = (event: string, callback: (data: { isOpen: boolean }) => void) => {
+const addInspectorListener = (
+  event: string,
+  callback: (data: DispatchEventType) => void,
+) => {
   if (window !== undefined) {
-    window.document.addEventListener(event, (event: Event) => {
-      const customEvent = event as CustomEvent<{ isOpen: boolean }>;
-      const { isOpen } = customEvent.detail;
-      if (callback) callback({ isOpen });
+    appController.receiveMessage(window, (data: DispatchEventType) => {
+      if (data.event === event) {
+        if (callback) {
+          const customEvent: DispatchEventType = {
+            event,
+            type: data.type,
+            payload: {
+              preset: data.payload.preset,
+              action: data.payload.action,
+              command: data.payload.command,
+            },
+          };
+          callback(customEvent);
+        }
+      }
     });
   }
-}
-
-const removeInspectorListener = (event: string, callback: (data: { isOpen: boolean }) => void) => {
-  if (window !== undefined) {
-    window.document.removeEventListener(event, (event: Event) => {
-      const customEvent = event as CustomEvent<{ isOpen: boolean }>;
-      const { isOpen } = customEvent.detail;
-      if (callback) callback({ isOpen });
-    });
-  }
-}
+};
 
 export const inspectorController = {
   onOpenInpsector,
   addInspectorListener,
-  removeInspectorListener,
-}
+};

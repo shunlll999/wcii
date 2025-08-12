@@ -1,4 +1,3 @@
-// classes.tsx
 import { Expose } from '@Inspector/meta/decorators';
 import React from 'react';
 
@@ -7,7 +6,19 @@ export class Player {
   name: string = 'Player1';
 
   @Expose()
-  health: number = 100;
+  width: number = 100;
+
+  @Expose()
+  height: number = 100;
+
+  @Expose()
+  x: number = 0;
+
+  @Expose()
+  y: number = 0;
+
+  @Expose()
+  position: boolean = false;
 
   @Expose({
     params: [
@@ -16,8 +27,8 @@ export class Player {
     ],
   })
   takeDamage(damage: number, critical: boolean) {
-    this.health -= critical ? damage * 2 : damage;
-    console.log(`${this.name} took ${critical ? 'CRITICAL' : ''} damage! HP=${this.health}`);
+    this.width -= critical ? damage * 2 : damage;
+    console.log(`${this.name} took ${critical ? 'CRITICAL' : ''} damage! HP=${this.width}`);
   }
 
   @Expose({

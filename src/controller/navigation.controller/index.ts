@@ -1,22 +1,21 @@
+import { EVENTS } from "@Shared/constants/event";
 import { useAppDispatch } from "@Shared/hooks/useAppDispatch";
-import { onDispachType, PresetAction } from "@Shared/type";
+import { DispatchEventType, PresetAction } from "@Shared/type";
 
 const addPreset = (preset: string, action: PresetAction) => {
   const dispatch = useAppDispatch();
-  dispatch.navigationController.dispatch({
+  dispatch.appController.dispatch({
+    event: EVENTS.ON_BUILDER_DISPATCH,
     type: action,
     payload: { preset, action }
   });
 }
 
-const addPresetListener = (event: string, callback: (data: onDispachType) => void) => {
-  if (window !== undefined) {
-    window.document.addEventListener(event, (event: Event) => {
-      const customEvent = event as CustomEvent<onDispachType>;
-      const { type, payload } = customEvent.detail;
-      if (callback) callback({ type, payload });
-    });
-  }
+const addPresetListener = (event: string, callback: (data: DispatchEventType) => void) => {
+  const { appController } = useAppDispatch();
+  appController.addListener(event, (data: DispatchEventType) => {
+    if (callback) callback(data);
+  });
 }
 
 export const navigationController = {

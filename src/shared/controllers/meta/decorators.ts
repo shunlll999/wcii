@@ -1,4 +1,3 @@
-// decorators.ts
 import 'reflect-metadata';
 import React from 'react';
 

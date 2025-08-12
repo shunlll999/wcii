@@ -5,9 +5,10 @@ import DisabledByDefaultRoundedIcon from '@mui/icons-material/DisabledByDefaultR
 import { Button, Icon, IconButton } from '@mui/material';
 import { inspectorController } from '@Controllers/inspector.controller';
 import { EVENTS } from '@Shared/constants/event';
+import { DispatchEventType } from '@Shared/type';
 
 export function Inspector({ instance }: { instance: any }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const exposedProps = getExposedProperties(instance);
   const [paramValues, setParamValues] = useState<Record<string, any>>({});
 
@@ -41,8 +42,17 @@ export function Inspector({ instance }: { instance: any }) {
     instance[key](...args);
   };
 
-  const handleInspectorToggle = (data: { isOpen: boolean, preset?: string }) => {
-    setIsOpen(data.isOpen);
+  const handleInspectorToggle = (event: DispatchEventType) => {
+    if (
+      event.payload &&
+      'command' in event.payload &&
+      event.payload.command &&
+      'value' in event.payload.command &&
+      event.payload.command.value &&
+      typeof event.payload.command.value.isOpen === 'boolean'
+    ) {
+      setIsOpen(event.payload.command.value.isOpen);
+    }
   };
 
   useEffect(() => {

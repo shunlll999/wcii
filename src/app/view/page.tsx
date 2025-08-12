@@ -4,9 +4,11 @@ import styles from './view.module.css';
 import { CssBaseline, TextField, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
 import { EVENTS } from '@Shared/constants/event';
-import { onEventListener } from '@Shared/type';
+import { DispatchEventType, PresetAction } from '@Shared/type';
+import { useAppDispatch } from '@Shared/hooks/useAppDispatch';
 
 export default function View() {
+  const { appController } = useAppDispatch();
   const [mode, setMode] = useState<'light' | 'dark'>('light');
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -19,24 +21,37 @@ export default function View() {
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-  const [presets, setPresets] = useState<any[]>([]);
-  const handlePresetDispatch = (event: MessageEvent<onEventListener>) => {
-    const { event: eventType, payload } = event.data;
-    if (eventType === 'add-preset') {
+  const [presets, setPresets] = useState<string[]>([]);
+  const handlePresetDispatch = (data: DispatchEventType) => {
+    const { event: eventType, payload } = data;
+    if (eventType === EVENTS.ON_BUILDER_DISPATCH) {
       setPresets(prevPresets => [...prevPresets, payload.preset]);
     }
   };
 
   const onHandlePreset = (preset: string) => {
     if (window.parent) {
-      window.postMessage({ event: EVENTS.ON_INSPECTOR_OPEN, payload: { isOpen: true, preset } }, '*');
+      const messageData: DispatchEventType = {
+        event: EVENTS.ON_INSPECTOR_OPEN,
+        type: PresetAction.UPDATE,
+        payload: {
+          preset,
+          action: PresetAction.UPDATE,
+          command: {
+            control: 'inspector',
+            type: PresetAction.OPEN_INSPECTOR,
+            value: { isOpen: true },
+          }
+        },
+      };
+      appController.sendMessage(window, messageData);
     }
   };
 
   useEffect(() => {
-    window.addEventListener('message', handlePresetDispatch);
+    appController.receiveMessage(window, handlePresetDispatch);
     return () => {
-      window.removeEventListener('message', handlePresetDispatch);
+      appController.removeListener('message', handlePresetDispatch);
     };
   }, []);
 
@@ -55,7 +70,7 @@ export default function View() {
 
   return (
     <ThemeProvider theme={createAppTheme(mode)}>
-      <CssBaseline /> {/* reset style ของ browser */}
+      <CssBaseline />
       <div className={styles['view-body']}>
         {presets.map((preset, index) => (
           <div className={styles['view-preset']} onClick={() => onHandlePreset(preset)} key={index}>
