@@ -1,0 +1,62 @@
+.layout {
+  --gray-lt-rgb: 0, 0, 0;
+  --gray-lt-alpha-200: rgba(var(--gray-lt-rgb), 0.08);
+  --gray-lt-alpha-100: rgba(var(--gray-lt-rgb), 0.05);
+  --primary-dot: rgba(var(--gray-lt-rgb), 0.2);
+  --device-height: calc(100dvh - 60px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .layout {
+    --gray-lt-rgb: 255, 255, 255;
+    --gray-lt-alpha-200: rgba(var(--gray-lt-rgb), 0.08);
+    --gray-lt-alpha-100: rgba(var(--gray-lt-rgb), 0.05);
+    --primary-dot: rgba(var(--gray-lt-rgb), 0.2);
+    --device-height: calc(100dvh - 60px);
+  }
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  position: relative;
+  height: var(--device-height);
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  padding: 0 16px;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-lt-alpha-200);
+}
+
+.inspector {
+  position: absolute;
+  top: 0;
+  right: -350px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: var(--device-height);
+  background-color: var(--background);
+  padding: 16px;
+  transition: all 0.5s cubic-bezier(0.83, 0, 0.17, 1);
+}
+
+.inspector.open {
+  right: 0;
+}
+
+.section {
+  display: block;
+  background-color: var(--gray-lt-rgb);
+  background-image: radial-gradient(
+      circle at center,
+      var(--primary-dot) 1px,
+      transparent 0
+    );
+  background-size: 1.5rem 1.5rem;
+}
+

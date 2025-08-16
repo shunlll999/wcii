@@ -1,0 +1,7 @@
+export const SECRET = 'wcii-secret-1234567890';
+export const DEFAULT_SECURE_CODE = {
+  MAX_AGE_MS: 5_000,
+  MAX_FUTURE_SKEW_MS: 1_000,
+  CLEANUP_INTERNAL_MS: 30_000,
+  CACHE_TTL_MS: 60_000,
+};
