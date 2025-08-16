@@ -5,6 +5,13 @@ import { MessageHandler } from "./channel.type";
 import { signMessage } from "./channel.util";
 import { logValidationError, validationMessage } from "./channel.validation";
 
+/**
+ *
+ * @param channelName
+ * @param onMessage
+ * @param options
+ * @returns Object
+ */
 function createSecureChannel<T = unknown>(
   channelName: string,
   onMessage: MessageHandler<T>,

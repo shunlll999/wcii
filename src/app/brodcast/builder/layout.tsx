@@ -3,12 +3,17 @@ import { Navigation } from '@Components/builder/nav/navigation';
 import styles from './layout.module.css';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ImageCard } from '@Shared/controllers/propsClasses/presets/ImageCard.preset';
+import { createSecureChannel } from '@Shared/modules/channel/secureChannel';
+import { EVENTS } from '@Shared/constants/event';
 
 export default function BuilderLayout({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
   const imageCardInstance = new ImageCard();
+  const [openInspector, setInpsector] = useState<boolean>(false);
+
+    const channelRef = useRef<{ [key: string]: any }>({});
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -20,6 +25,20 @@ export default function BuilderLayout({ children }: { children: React.ReactNode 
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
+
+
+    useEffect(() => {
+    channelRef.current['channel1'] = createSecureChannel('secure_channel_1', (message: any) => {
+      if (message.payload.event === EVENTS.ON_INSPECTOR_OPEN) {
+        setInpsector(message.payload.payload.command.value.isOpen);
+      }
+    });
+
+    return () => {
+      channelRef.current['channel1']?.close();
+    }
+  })
+
   return (
     <ThemeProvider theme={createAppTheme(mode)}>
       <CssBaseline />
@@ -28,7 +47,7 @@ export default function BuilderLayout({ children }: { children: React.ReactNode 
         <main className={styles.main}>
            <nav>Navigation</nav>
           <section className={styles.section}>{children}</section>
-          <nav className={styles.inspector}>Inspector</nav>
+          <nav className={`${styles.inspector} ${openInspector && styles.open}`}>Inspector</nav>
         </main>
       </div>
     </ThemeProvider>

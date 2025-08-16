@@ -60,3 +60,34 @@
   background-size: 1.5rem 1.5rem;
 }
 
+.frame-builder {
+  height: var(--device-height);
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.frame-parent {
+  display: flex;
+  max-width: 1000px;
+  width: 930px;
+  height: calc(var(--device-height) - 1000px);
+  margin: auto;
+  background-color: var(--gray-lt-alpha-200);
+}
+
+.frame-content {
+  display: flex;
+  max-width: 1000px;
+  width: 930px;
+  height: calc(var(--device-height) - 600px);
+  margin: auto;
+  background-color: var(--gray-lt-alpha-100);
+}
+
+.frame-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+}
