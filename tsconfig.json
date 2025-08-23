@@ -27,7 +27,8 @@
       "@theme/*": ["./src/theme/*"],
       "@Inspector/*": ["./src/shared/controllers/*"],
       "@Constants/*": ["./src/Shared/constants/*"],
-      "@Types/*": ["./src/Shared/types/*"]
+      "@Types/*": ["./src/Shared/types/*"],
+      "@emotion/*": ["./node_modules/@emotion/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

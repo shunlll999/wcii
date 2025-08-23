@@ -5,8 +5,19 @@ type PresetType = {
   code: string
 }
 
+interface IPresetQueue {
+ seq: number,
+ data: PresetType[]
+}
+
+type PresetMode = {
+  basic: IPresetQueue,
+  form: IPresetQueue,
+  extra: IPresetQueue
+}
+
 type PresetResponseType = {
-  data: PresetType[],
+  data: PresetMode,
   type: string
 }
 
