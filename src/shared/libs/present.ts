@@ -16,6 +16,6 @@ export const getPresets = async (): Promise<PresetResponseType> => {
     },
   });
   if (res.statusText !== 'OK')
-    return { data: [], type: 'presets' } as PresetResponseType;
+    return { data: { basic: { seq: 1, data: [] }, form: { seq: 2, data: [] }, extra: { seq: 3, data: [] } }, type: 'presets' } as PresetResponseType;
   return res.data as Promise<PresetResponseType>;
 };
