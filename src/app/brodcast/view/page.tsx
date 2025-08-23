@@ -1,6 +1,6 @@
 'use client';
 import { EVENTS } from "@Shared/constants/event";
-import { createSecureChannel } from "@Shared/modules/channel/secureChannel";
+import { createSecureChannel } from "@Shared/modules/channel";
 import { DispatchEventType, PresetAction } from "@Shared/type";
 import { useEffect, useRef, useState } from "react";
 
@@ -31,6 +31,9 @@ const BroadcastView = () => {
     // channelsRef.current['channel1'].send('iframe', 'REQUEST_INSPECTOR', { time: Date.now(), preset: 'default', action: 'open' })
   }
 
+  console.log('openInspector', openInspector);
+  console.log(messages);
+
   useEffect(() => {
     if (window.parent) {
       const messageData: DispatchEventType = {
@@ -54,6 +57,7 @@ const BroadcastView = () => {
     <div>
       <h1>View</h1>
       <h3>Messages</h3>
+      IFRAME
       <ul>
         {messages.map((m, i) => <li key={i}>{m}</li>)}
       </ul>

@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import styles from './layout.module.css';
-import { createSecureChannel } from '@Shared/modules/channel/secureChannel';
+import { createSecureChannel } from '@Shared/modules/channel';
+
 
 export default function Builder() {
   const iFrameRef = useRef<HTMLIFrameElement>(null);
@@ -24,11 +25,14 @@ export default function Builder() {
     }
   })
 
+  console.log(messages);
+
   return (
     <div>
       <div className={styles['frame-builder']}>
         <h3>Builder Messages</h3>
         <div className={styles['frame-parent']}>
+          PAGE
           <ul>
             {messages.map((m, i) => <li key={i}>{m}</li>)}
           </ul>
