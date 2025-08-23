@@ -32,7 +32,6 @@ export default function Builder() {
       <div className={styles['frame-builder']}>
         <h3>Builder Messages</h3>
         <div className={styles['frame-parent']}>
-          PAGE
           <ul>
             {messages.map((m, i) => <li key={i}>{m}</li>)}
           </ul>

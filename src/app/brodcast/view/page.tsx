@@ -57,7 +57,6 @@ const BroadcastView = () => {
     <div>
       <h1>View</h1>
       <h3>Messages</h3>
-      IFRAME
       <ul>
         {messages.map((m, i) => <li key={i}>{m}</li>)}
       </ul>
