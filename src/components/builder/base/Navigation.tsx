@@ -1,6 +1,5 @@
 'use client';
 import { Skeleton } from '@mui/material';
-import LoopIcon from '@mui/icons-material/Loop';
 import dynamic from 'next/dynamic';
 export const Navigation = dynamic(() => import('@Components/builder/nav').then(m => m.Navigation), {
   ssr: false,

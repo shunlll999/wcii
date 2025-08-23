@@ -1,5 +1,6 @@
 import { EVENTS } from '@Shared/constants/event';
-import type { DispatchEventType } from '@Shared/type';
+import { DispatchEventType } from '@Shared/types/dispatch.type';
+
 
 export function useAppDispatch() {
   const appController = {

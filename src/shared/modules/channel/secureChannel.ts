@@ -1,7 +1,7 @@
-import { DEFAULT_SECURE_CODE, SECRET } from "../constants/channel.const";
+import { DEFAULT_SECURE_CODE } from "../constants/channel.const";
 import { createReplayCache } from "./channel.cache";
 import { BaseMessage, SecureChannelOprions, SignedMessage } from "./channel.interface";
-import { MessageHandler } from "./channel.type";
+import { MessageHandler, Details } from "./channel.type";
 import { signMessage } from "./channel.util";
 import { logValidationError, validationMessage } from "./channel.validation";
 
@@ -36,7 +36,7 @@ function createSecureChannel<T = unknown>(
     try {
       const validation = await validationMessage(message, replayCache, [MAX_AGE_MS, MAX_FUTURE_SKEW_MS]);
       if (!validation.valid) {
-        logValidationError(validation.error, channelName, message, validation.details);
+        logValidationError(validation.error, channelName, message, validation.details as Details | undefined);
         return;
       }
 

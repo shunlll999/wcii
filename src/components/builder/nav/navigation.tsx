@@ -14,7 +14,7 @@ console.log('PresetMode', data);
         <div className={styles['section-content']}>Item 1</div>
       </div>
       <div>
-        {Object.entries(data).sort(([, a], [, b]) => a.seq - b.seq).map(([key, item]) => (
+        {data && Object.entries(data).sort(([, a], [, b]) => a.seq - b.seq).map(([key, item]) => (
           <div key={key} >
             <div className={styles['section-header']}>{key}</div>
             <div className={styles['section-item']}>

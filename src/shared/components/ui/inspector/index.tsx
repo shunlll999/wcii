@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import './inspect.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getExposedProperties, ExposedMeta, ParamMeta } from '@Inspector/meta/decorators';
 import DisabledByDefaultRoundedIcon from '@mui/icons-material/DisabledByDefaultRounded';
-import { Button, Icon, IconButton } from '@mui/material';
-import { inspectorController } from '@Controllers/inspector.controller';
-import { EVENTS } from '@Shared/constants/event';
-import { DispatchEventType } from '@Shared/type';
+import { IconButton } from '@mui/material';
+// import { EVENTS } from '@Shared/constants/event';
+// import { DispatchEventType } from '@Shared/type';
 
 export function Inspector({ instance }: { instance: any }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,28 +42,25 @@ export function Inspector({ instance }: { instance: any }) {
     instance[key](...args);
   };
 
-  const handleInspectorToggle = (event: DispatchEventType) => {
-    if (
-      event.payload &&
-      'command' in event.payload &&
-      event.payload.command &&
-      'value' in event.payload.command &&
-      event.payload.command.value &&
-      typeof event.payload.command.value.isOpen === 'boolean'
-    ) {
-      setIsOpen(event.payload.command.value.isOpen);
-    }
-  };
+  // const handleInspectorToggle = (event: DispatchEventType) => {
+  //   if (
+  //     event.payload &&
+  //     'command' in event.payload &&
+  //     event.payload.command &&
+  //     'value' in event.payload.command &&
+  //     event.payload.command.value &&
+  //     typeof event.payload.command.value.isOpen === 'boolean'
+  //   ) {
+  //     setIsOpen(event.payload.command.value.isOpen);
+  //   }
+  // };
 
-  useEffect(() => {
-    inspectorController.addInspectorListener(EVENTS.ON_INSPECTOR_OPEN, handleInspectorToggle);
-  }, []);
 
   return (
     <div className={`inspector-container ${isOpen ? 'open' : ''}`}>
       <IconButton
         className="close-inspector"
-        onClick={() => inspectorController.onOpenInpsector(false)}
+        onClick={() => console.log('close inspector')}
       >
         <DisabledByDefaultRoundedIcon />
       </IconButton>

@@ -1,20 +1,38 @@
 'use client';
 
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import { useState } from "react";
-import { useServerInsertedHTML } from "next/navigation";
+import * as React from 'react';
+import { CacheProvider } from '@emotion/react';
+import createCache, { EmotionCache } from '@emotion/cache';
+import { useServerInsertedHTML } from 'next/navigation';
 
 type ThemeRegistryProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
-export const ThemeRegistry = ({ children }: ThemeRegistryProps) => {
-  const [cache] = useState(() => createCache({ key: 'mui', prepend: true }));
+export const ThemeRegistry: React.FC<ThemeRegistryProps> = ({ children }) => {
+  const [cache] = React.useState<EmotionCache>(() => {
+    const c = createCache({ key: 'mui', prepend: true });
+    // c.compat = true; // (optional) บางโปรเจกต์ MUI แนะนำเปิด compat
+    return c;
+  });
 
-  useServerInsertedHTML(() => (
-    <style data-emotion={`${cache.key} ${Object.keys((cache as any).inserted).join(' ')}}`} dangerouslySetInnerHTML={{ __html: Object.values((cache as any).inserted).join(' ') }} />
-  ));
+  useServerInsertedHTML(() => {
+    const { inserted, key } = cache; // inserted: Record<string, string | true>
+    const names = Object.keys(inserted);
 
-  return <CacheProvider value={cache}>{children}</CacheProvider>
+    // filter เฉพาะค่าที่เป็น string เพราะบาง key จะเป็น true
+    const css = names
+      .map(name => inserted[name])
+      .filter((v): v is string => typeof v === 'string')
+      .join(' ');
+
+    return (
+      <style
+        data-emotion={`${key} ${names.join(' ')}`}
+        dangerouslySetInnerHTML={{ __html: css }}
+      />
+    );
+  });
+
+  return <CacheProvider value={cache}>{children}</CacheProvider>;
 };

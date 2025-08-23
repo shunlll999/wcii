@@ -1,0 +1,14 @@
+.frame-content {
+  display: block;
+  max-width: 1000px;
+  height: calc(100dvh - 92px);
+  margin: 0 auto;
+  background-color: var(--gray-lt-alpha-100);
+}
+
+.frame-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+}
