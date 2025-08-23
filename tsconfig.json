@@ -26,6 +26,8 @@
       "@Controllers/*": ["./src/controller/*"],
       "@theme/*": ["./src/theme/*"],
       "@Inspector/*": ["./src/shared/controllers/*"],
+      "@Constants/*": ["./src/Shared/constants/*"],
+      "@Types/*": ["./src/Shared/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

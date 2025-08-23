@@ -1,5 +1,5 @@
 'use client';
-import { Navigation } from '@Components/builder/nav/navigation';
+import { Navigation } from '@Components/builder/nav/_navigation';
 import styles from './layout.module.css';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
