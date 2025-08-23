@@ -1,41 +1,31 @@
-'use client';
-import { Navigation } from '@Components/builder/nav/navigation';
 import styles from './layout.module.css';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { createAppTheme } from '@theme/theme';
-import { useEffect, useState } from 'react';
-import { Inspector } from '@Shared/components/ui/inspector';
-import { ImageCard } from '@Shared/controllers/propsClasses/presets/ImageCard.preset';
+import { Navigation } from '@Components/builder/base/Navigation';
+import { ThemeRegistry } from '@Components/builder/base/ThemeRegistry';
+import { ClientProviders } from '@Components/builder/base/ClientProvider';
+import { getPresets } from '@Shared/libs/present';
 
-export default function BuilderLayout({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const imageCardInstance = new ImageCard();
+type BuilderLayoutProps = {
+  children: React.ReactNode;
+};
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    setMode(mediaQuery.matches ? 'dark' : 'light');
-    const handler = (e: MediaQueryListEvent) => {
-      setMode(e.matches ? 'dark' : 'light');
-    };
-
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
+export default async function BuilderLayout({ children }: BuilderLayoutProps) {
+  const presets = await getPresets();
   return (
-    <ThemeProvider theme={createAppTheme(mode)}>
-      <CssBaseline />
-      <div className={styles.layout}>
-        <header className={styles.header}>Builder Header</header>
-        <main className={styles.main}>
-          <nav className={styles.nav}>
-            <Navigation />
-          </nav>
-          <section className={styles.section}>{children}</section>
-          <nav>
-            <Inspector instance={imageCardInstance} />
-          </nav>
-        </main>
-      </div>
-    </ThemeProvider>
+    <ThemeRegistry>
+      <ClientProviders>
+        <div className={styles.layout}>
+          <header className={styles.header}>Builder Header</header>
+          <main className={styles.main}>
+            <nav className={styles.nav}>
+              <Navigation presets={presets} />
+            </nav>
+            <section className={styles.section}>{children}</section>
+            <nav>
+              Inspector Panel
+            </nav>
+          </main>
+        </div>
+      </ClientProviders>
+    </ThemeRegistry>
   );
 }
