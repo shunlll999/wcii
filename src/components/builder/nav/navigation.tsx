@@ -60,7 +60,7 @@ export const Navigation = () => {
 
   return (
     <div className={styles['navigation-container']}>
-      <div className={styles['preset-navigation']}>
+      {/* <div className={styles['preset-navigation']}>
         <IconButton
           className={styles['preset-add-button']}
           onClick={() => onActionContoller('image')}
@@ -68,7 +68,7 @@ export const Navigation = () => {
         >
           <AddHomeWorkIcon />
         </IconButton>
-      </div>
+      </div> */}
       <SimpleTreeView
         aria-label="customized"
         defaultExpandedItems={['1', '3']}
