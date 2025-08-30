@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 
 type Maybe<T> = T | null | undefined;
 
@@ -33,6 +33,8 @@ export function resolveBaseURL(): string {
 export const api: AxiosInstance = axios.create({
   baseURL: resolveBaseURL(),
 });
+
+export { AxiosError }
 
 export function setAuthToken(token?: string) {
   if (token) api.defaults.headers.common.Authorization = `Bearer ${token}`;

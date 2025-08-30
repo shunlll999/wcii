@@ -1,0 +1,12 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "material-icon-theme.files.associations": {
+    "*.wci": "rocket"
+  },
+  "problems.exclude": {
+    "**/*.wci": true
+  },
+  "files.associations": {
+    "*.wci": "handlebars"
+  },
+}

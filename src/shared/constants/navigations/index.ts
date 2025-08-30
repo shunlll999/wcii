@@ -6,5 +6,6 @@ export const PAGE_URL = {
 }
 
 export const ROUTE_API = {
-  NAVIGATION: '/api/navigation'
+  NAVIGATION: '/api/navigation',
+  PRESET_CODE: '/api/preset/:code'
 }

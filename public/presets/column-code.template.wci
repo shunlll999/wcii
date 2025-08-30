@@ -1,0 +1,24 @@
+import { ReactNode } from 'react';
+const <%componentName%> = (props) => {
+  return (
+    <div className={props.className.container}>
+      <div className={props.className.column}>1</div>
+      <div className={props.className.column}>2</div>
+    </div>
+  );
+}
+
+<%componentName%>.metadata = {
+  name: "<%componentName%>",
+  category: "Column",
+  description: "A simple Column component",
+  props: {
+    className: {
+      container: "className",
+      column: "className"
+    },
+    children: { type: "ReactNode" }
+  }
+}
+
+export default <%componentName%>
