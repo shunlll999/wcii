@@ -2,7 +2,15 @@ type PresetType = {
   id: number,
   name: string,
   description: string,
-  code: string
+  code: string,
+  icon?: string
+}
+
+type ComponentsResponseType = {
+  code: string,
+  template: string,
+  id: number,
+  error?: string
 }
 
 interface IPresetQueue {
@@ -24,5 +32,6 @@ type PresetResponseType = {
 
 export type {
   PresetType,
-  PresetResponseType
+  PresetResponseType,
+  ComponentsResponseType
 }

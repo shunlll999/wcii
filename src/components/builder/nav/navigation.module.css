@@ -42,6 +42,7 @@
   background-color: var(--background-nav);
   border-bottom: 1px solid var(--gray-lt-alpha-100);
   margin: 1rem 0;
+  text-transform: capitalize;
 }
 
 .section-content {
@@ -51,12 +52,19 @@
   width: 100%;
   height: 100px;
   padding: 0 16px;
+  text-align: center;
+  background-color: var(--gray-lt-alpha-100);
 }
 
 .section-item {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   width: 100%;
+  gap: 8px;
   padding: 0 16px;
   margin-bottom: 1rem;
+}
+
+.material-icons {
+  font-size: 24px;
 }

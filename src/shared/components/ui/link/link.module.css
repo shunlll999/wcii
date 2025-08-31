@@ -1,8 +1,0 @@
-.link-container {
-  display: inline-block;
-  text-decoration: none;
-  color: var(--link-color, #007bff);
-  font-weight: 500;
-  user-select: none;
-  cursor: pointer;
-}

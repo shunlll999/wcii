@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 import { EVENTS } from "@Shared/constants/event";
 import { createSecureChannel } from "@Shared/modules/channel";
-import { DispatchEventType, PresetAction } from "@Shared/type";
+import { DispatchEventType, PresetAction } from "@Shared/types/dispatch.type";
 import { useEffect, useRef, useState } from "react";
 
 const BroadcastView = () => {

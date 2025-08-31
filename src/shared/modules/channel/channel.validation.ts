@@ -5,11 +5,17 @@ import { SignedMessage } from "./channel.interface";
 import { ValidationResult } from "./channel.type";
 import { verifySignature } from "./channel.util";
 
+interface Details {
+  age?: number;
+  skew?: number;
+}
+
+
 function logValidationError<T>(
   error: MessageValidationError,
   channelName: string,
   message: SignedMessage<T>,
-  details?: any
+  details?: Details
 ) {
   const errorMessage = {
     [MessageValidationError.INVALID_SIGNATURE]: `❌ Invalid signature for message`,

@@ -4,8 +4,8 @@ import styles from './view.module.css';
 import { CssBaseline, TextField, ThemeProvider } from '@mui/material';
 import { createAppTheme } from '@theme/theme';
 import { EVENTS } from '@Shared/constants/event';
-import { DispatchEventType, PresetAction } from '@Shared/type';
 import { useAppDispatch } from '@Shared/hooks/useAppDispatch';
+import { DispatchEventType, PresetAction } from '@Shared/types/dispatch.type';
 
 export default function View() {
   const { appController } = useAppDispatch();
