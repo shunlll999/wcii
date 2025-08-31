@@ -75,6 +75,13 @@ export const Navigation = ({ presets }: NavigationProps) => {
     'ArtTrackOutlinedIcon': <ArtTrackOutlinedIcon fontSize='large' />,
   } as { [key: string]: React.ReactNode };
 
+
+  const onDragStart = (event: React.DragEvent<HTMLDivElement>, item: PresetType) => {
+    console.log(item);
+    event.dataTransfer.setData('application/x-builder', JSON.stringify(item));
+    event.dataTransfer.effectAllowed = 'copy';
+  };
+
   return (
     <div className={styles.nav}>
       <div>
@@ -95,7 +102,8 @@ export const Navigation = ({ presets }: NavigationProps) => {
                       draggable
                         key={data.id}
                         className={styles['section-content']}
-                        onClick={() => onSelectedCode(data)}
+                        // onClick={() => onSelectedCode(data)}
+                        onDragStart={(e) => onDragStart(e, data)}
                       >
                         <div>
                         <div>{icon[data?.icon || 'CropSquareOutlinedIcon']}</div>
