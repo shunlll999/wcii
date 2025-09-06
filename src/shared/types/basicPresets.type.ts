@@ -1,9 +1,15 @@
+type NodeType = "text" | "button" | "image" | "video" | "container" | "column" | "row"
+
 type PresetType = {
   id: number,
   name: string,
-  description: string,
   code: string,
-  icon?: string
+  description?: string,
+  icon?: string,
+  sourceId?: string,
+  props?: Record<string, unknown>;
+  children?: PresetType[],
+  metadata?: Record<string, unknown>[],
 }
 
 type ComponentsResponseType = {
@@ -12,12 +18,6 @@ type ComponentsResponseType = {
   id: number,
   error?: string
 }
-
-interface IPresetQueue {
- seq: number,
- data: PresetType[]
-}
-
 type PresetMode = {
   basic: IPresetQueue,
   form: IPresetQueue,
@@ -29,9 +29,23 @@ type PresetResponseType = {
   type: string
 }
 
+interface ILayoutNode {
+  id: string;
+  type: NodeType;
+  props?: Record<string, unknown>;
+  children?: ILayoutNode[];
+}
+
+interface IPresetQueue {
+ seq: number,
+ data: PresetType[]
+}
+
 
 export type {
   PresetType,
   PresetResponseType,
-  ComponentsResponseType
+  ComponentsResponseType,
+  NodeType,
+  ILayoutNode
 }
