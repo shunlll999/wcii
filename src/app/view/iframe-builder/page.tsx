@@ -190,8 +190,6 @@ export default function IframeCanvasPage() {
     setLayout(prevLayout => {
       let newLayout = [...prevLayout];
 
-      console.log('payload.sourceId', payload.sourceId);
-
       // CASE 1: Reorder existing node
       if (payload.sourceId) {
         const sourcePath = findNodePath(newLayout, payload.sourceId);

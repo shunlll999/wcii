@@ -81,6 +81,11 @@ export const Navigation = ({ presets }: NavigationProps) => {
     event.dataTransfer.effectAllowed = 'copy';
   };
 
+  const onDropItem = (event: React.DragEvent<HTMLDivElement>, item: PresetType) => {
+    console.log('onDropItem', item);
+  };
+
+
   return (
     <div className={styles.nav}>
       <div>
