@@ -28,6 +28,7 @@
   transition: outline 0.15s ease;
 }
 .btn {
+  position: relative;
   display: inline-block;
   padding: 8px 12px;
   border-radius: 10px;
@@ -44,10 +45,12 @@
 .g-insert-before {
   border: 1px dashed #7c3aed;
   outline-offset: -20px;
-  box-shadow: 0px -12px 0px -10px #3b82f6;
+  box-shadow: 0px -15px 0px -10px #3b82f6;
+  transition: all 0.15s ease;
 }
 .g-insert-after {
   border: 1px dashed #7c3aed;
   outline-offset: -20px;
-  box-shadow: 0px 12px 0px -10px #3b82f6;
+  box-shadow: 0px 15px 0px -10px #3b82f6;
+  transition: all 0.15s ease;
 }

@@ -12,8 +12,6 @@ export default function IframeCanvasPage() {
   const dropzoneRef = useRef<HTMLDivElement>(null);
   const hoverNodeRef = useRef<HTMLElement | null>(null);
 
-  console.log('dragOverNode', dragOverNode)
-
   // ------------------------ UTILITIES ------------------------ //
 
   const findNodePath = (
@@ -32,10 +30,7 @@ export default function IframeCanvasPage() {
     return null;
   };
 
-  const getNodeByPath = (
-    nodes: PresetType[],
-    path: (number | 'children')[]
-  ): PresetType | null => {
+  const getNodeByPath = (nodes: PresetType[], path: (number | 'children')[]): PresetType | null => {
     let current: PresetType | null = null;
     let arr = nodes;
     for (const idx of path) {
@@ -67,61 +62,14 @@ export default function IframeCanvasPage() {
     return nodeCopy;
   };
 
-  // ------------------------ RENDER NODE ------------------------ //
-
-  const renderNode = (node: PresetType, parentId?: string) => {
-    const isHighlighted = dragOverNode.current === node.sourceId;
-
-    return (
-      <div
-        key={node.sourceId}
-        data-source-id={`node ${isHighlighted ? `highlight-${dragOverNode.current}` : ''}`}
-        className={`node ${isHighlighted ? `highlight-${dragOverNode.current}` : ''}`}
-        draggable
-        onDragStart={e => {
-          e.dataTransfer.setData(
-            'application/x-builder',
-            JSON.stringify({ sourceId: node.sourceId })
-          );
-          e.dataTransfer.effectAllowed = 'move';
-        }}
-        onDragOver={e => {
-          e.preventDefault();
-          dragOverNode.current = node.sourceId ?? null;
-          dragPosition.current = 'before';
-        }}
-        onDrop={e => onDrop(e, parentId, node.sourceId, 'before')}
-      >
-        {/* Node content */}
-        {node.code === 'text-code' && (
-          <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>
-        )}
-        {node.code === 'button-code' && <button>Button</button>}
-        {node.code === 'image-code' && (
-          <img
-            width="100%"
-            src="https://www.dpreview.com/files/p/articles/3912995929/Krobus-cat-sony-50-150-f2-gm.jpeg"
-            alt="placeholder"
-          />
-        )}
-        {node.code === 'container-code' && (
-          <div
-            className="node"
-            style={{ background: 'blue' }}
-            onDrop={e => onDrop(e, node.sourceId, undefined, 'inside')}
-          >
-            {node.children?.map(c => renderNode(c, node.sourceId))}
-          </div>
-        )}
-      </div>
-    );
-  };
 
   // ------------------------ HIGHLIGHT HANDLER ------------------------ //
 
+  const allPositionClasses = ['g-insert-before', 'g-insert-after'];
+
   const clearHighlight = () => {
     if (hoverNodeRef.current) {
-      hoverNodeRef.current.classList.remove('g-insert-before', 'g-insert-after');
+      hoverNodeRef.current.classList.remove(...allPositionClasses);
       hoverNodeRef.current = null;
     }
     dropzoneRef.current?.classList.remove('g-hover');
@@ -129,12 +77,15 @@ export default function IframeCanvasPage() {
   };
 
   const setHighlightNode = (el: HTMLElement, position: 'before' | 'after') => {
+    const allPositionClasses = ['g-insert-before', 'g-insert-after'];
     if (hoverNodeRef.current && hoverNodeRef.current !== el) {
-      hoverNodeRef.current.classList.remove('g-insert-before', 'g-insert-after');
+      hoverNodeRef.current.classList.remove(...allPositionClasses);
     }
     hoverNodeRef.current = el;
-    dragOverNode.current = position;
-    el.classList.add(position === 'before' ? 'g-insert-before' : 'g-insert-after');
+    dragPosition.current = position;
+    const targetClass = `g-insert-${position}`;
+    el.classList.remove(...allPositionClasses);
+    el.classList.add(targetClass);
   };
 
   const onDragOver = (e: DragEvent) => {
@@ -149,7 +100,7 @@ export default function IframeCanvasPage() {
       if (hoverNodeRef.current) {
         hoverNodeRef.current.classList.remove('g-insert-before', 'g-insert-after');
         hoverNodeRef.current = null;
-        dragOverNode.current = null;
+        // dragOverNode.current = null;
       }
       return;
     }
@@ -168,6 +119,60 @@ export default function IframeCanvasPage() {
     }
   };
 
+  // ------------------------ RENDER NODE ------------------------ //
+
+  const onMoveElement = (event: React.DragEvent<HTMLDivElement>, node: PresetType) => {
+    console.log(dragPosition.current);
+    event.dataTransfer.setData(
+      'application/x-builder',
+      JSON.stringify({ sourceId: node.sourceId })
+    );
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  const onDragOverElement = (event: React.DragEvent<HTMLDivElement>, node: PresetType) => {
+    event.preventDefault();
+    dragOverNode.current = node.sourceId ?? null;
+  };
+
+
+  const renderNode = (node: PresetType, parentId?: string) => {
+    const isHighlighted = dragOverNode.current === node.sourceId;
+    return (
+      <div
+        key={node.sourceId}
+        data-source-id={`node ${isHighlighted ? `highlight-${dragPosition.current}` : ''}`}
+        className={`node ${isHighlighted ? `highlight-${dragPosition.current}` : ''}`}
+        draggable
+        onDragStart={e => onMoveElement(e, node)}
+        onDragOver={e => onDragOverElement(e, node)}
+        onDrop={e => onDrop(e, parentId, node.sourceId, dragPosition.current ?? 'before')}
+      >
+        {/* Node content */}
+        {node.code === 'text-code' && (
+          <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>
+        )}
+        {node.code === 'button-code' && <button>Button</button>}
+        {node.code === 'image-code' && (
+          <img
+            width="100%"
+            src="https://www.dpreview.com/files/p/articles/3912995929/Krobus-cat-sony-50-150-f2-gm.jpeg"
+            alt="placeholder"
+          />
+        )}
+        {node.code === 'container-code' && (
+          <div
+            className="node"
+            style={{ background: 'blue' }}
+            onDrop={e => onDrop(e, node.sourceId, undefined, dragPosition.current ?? 'inside')}
+          >
+            {node.children?.map(c => renderNode(c, node.sourceId))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // ------------------------ DROP HANDLER ------------------------ //
 
   const onDrop = (
@@ -177,7 +182,6 @@ export default function IframeCanvasPage() {
     position: 'before' | 'after' | 'inside' = 'inside'
   ) => {
     e.preventDefault();
-
     const raw = e.dataTransfer?.getData('application/x-builder');
     if (!raw) return;
 
@@ -185,6 +189,8 @@ export default function IframeCanvasPage() {
 
     setLayout(prevLayout => {
       let newLayout = [...prevLayout];
+
+      console.log('payload.sourceId', payload.sourceId);
 
       // CASE 1: Reorder existing node
       if (payload.sourceId) {
@@ -208,38 +214,37 @@ export default function IframeCanvasPage() {
         }
 
         targetArray.splice(insertIndex, 0, sourceNode);
-        dragOverNode.current = null;
-        dragPosition.current = null;
+        // dragOverNode.current = null;
         return [...newLayout];
       }
+        // CASE 2: Insert new node from sidebar preset
+        const newNode: PresetType = {
+          ...payload,
+          metadata: [{ name: payload.name, value: payload.code }],
+          sourceId: uuid(),
+          children: payload.code === 'container-code' ? [] : undefined,
+        };
 
-      // CASE 2: Insert new node from sidebar preset
-      const newNode: PresetType = {
-        ...payload,
-        metadata: [{ name: payload.name, value: payload.code }],
-        sourceId: uuid(),
-        children: payload.code === 'container-code' ? [] : undefined,
-      };
+        const parentPath = parentId ? findNodePath(newLayout, parentId) : [];
+        const targetArray = parentPath
+          ? (getNodeByPath(newLayout, parentPath)?.children ?? newLayout)
+          : newLayout;
 
-      const parentPath = parentId ? findNodePath(newLayout, parentId) : [];
-      const targetArray = parentPath
-        ? (getNodeByPath(newLayout, parentPath)?.children ?? newLayout)
-        : newLayout;
+        let insertIndex = targetArray.length;
+        if (targetId) {
+          const idx = targetArray.findIndex(n => n.sourceId === targetId);
+          if (idx !== -1) insertIndex = position === 'before' ? idx : idx + 1;
+        }
 
-      let insertIndex = targetArray.length;
-      if (targetId) {
-        const idx = targetArray.findIndex(n => n.sourceId === targetId);
-        if (idx !== -1) insertIndex = position === 'before' ? idx : idx + 1;
-      }
-
-      targetArray.splice(insertIndex, 0, newNode);
-      dragOverNode.current = null;
-      dragPosition.current = null;
-      return [...newLayout];
+        targetArray.splice(insertIndex, 0, newNode);
+        // dragOverNode.current = null;
+        return [...newLayout];
     });
 
     clearHighlight();
   };
+
+  console.log('layout', layout);
 
   // ------------------------ BIND EVENTS ------------------------ //
   useEffect(() => {
