@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import './inspect.css';
 import React, { useState } from 'react';
-import { getExposedProperties, ExposedMeta, ParamMeta } from '@Inspector/meta/decorators';
+import { getExposedProperties, ExposedMeta, ParamMeta } from '@Shared/controllers/meta/decorators';
 import DisabledByDefaultRoundedIcon from '@mui/icons-material/DisabledByDefaultRounded';
 import { IconButton } from '@mui/material';
 // import { EVENTS } from '@Shared/constants/event';

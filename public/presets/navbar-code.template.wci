@@ -9,12 +9,12 @@ const <%componentName%> = (props) => {
 
 <%componentName%>.metadata = {
   name: "<%componentName%>",
-  category: "Containers",
+  category: "<%componentName%>",
   type: 'widget',
-  id: 1,
-  code: 'container-code',
+  id: 16,
+  code: 'navbar-code',
   icon: "CropSquareOutlinedIcon",
-  description: "A simple container component",
+  description: "A simple navbar component",
   props: {
     className: {
       container: "className",

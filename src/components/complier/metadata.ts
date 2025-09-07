@@ -3,7 +3,11 @@ import type { ComponentType } from 'react';
 export type ComponentMetadata = {
   name: string;
   category: string;
+  code: string;
   description?: string;
+  type: 'base' | 'widget' | 'layout';
+  icon?: string;
+  id?: number;
   props?: Record<
     string,
     | { type: 'string' | 'number' | 'boolean' | 'ReactNode' | 'className' }

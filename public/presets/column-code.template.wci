@@ -11,6 +11,10 @@ const <%componentName%> = (props) => {
 <%componentName%>.metadata = {
   name: "<%componentName%>",
   category: "Column",
+  type: 'widget',
+  id: 2,
+  code: 'column-code',
+  icon: "ViewColumnOutlinedIcon",
   description: "A simple Column component",
   props: {
     className: {

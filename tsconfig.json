@@ -25,7 +25,7 @@
       "@Shared/*": ["./src/shared/*"],
       "@Controllers/*": ["./src/controller/*"],
       "@theme/*": ["./src/theme/*"],
-      "@Inspector/*": ["./src/shared/controllers/*"],
+      "@Inspector/*": ["src/shared/controllers/*"],
       "@Constants/*": ["./src/Shared/constants/*"],
       "@Types/*": ["./src/Shared/types/*"],
       "@emotion/*": ["./node_modules/@emotion/*"]
