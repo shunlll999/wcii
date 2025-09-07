@@ -2,9 +2,13 @@ import { WCI_TEMPLATE_CODE } from '@Shared/constants/template/wciTemplate';
 import { toPascalCase } from '@Shared/utils/allCapital';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+type ParamsRequest = {
+  params: Promise<{ code: string }>;
+};
+
+export async function GET(request: NextRequest, { params }: ParamsRequest) {
   const  { searchParams } = new URL(request.url);
-  const code = searchParams.get('code')?.toString() ?? '';
+  const { code } = await params;
   const id = searchParams.get('id')?.toString() ?? 0;
   try {
     const fileUrl = new URL(WCI_TEMPLATE_CODE(code)[code], request.url);

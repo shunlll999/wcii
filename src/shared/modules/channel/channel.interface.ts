@@ -1,4 +1,6 @@
-export interface BaseMessage<T = unknown> {
+import { PresetType } from "@Shared/types";
+
+export interface BaseMessage<T = PresetType> {
   messageId: string;
   from: string;
   type: string;
@@ -16,3 +18,13 @@ export interface SecureChannelOprions {
   CLEANUP_INTERNAL_MS?: number;
   CACHE_TTL_MS?: number;
 }
+
+export interface SecureChannelType {
+  send: (to: string, event: string, payload?: PresetType) => Promise<void>;
+  close: () => void;
+}
+
+export interface SecureChannelTypeWithRequiredPayload extends Omit<SecureChannelType, 'send'> {
+  send: (to: string, event: string, payload: PresetType) => Promise<void>;
+  close: () => void;
+};

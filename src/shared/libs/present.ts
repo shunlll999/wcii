@@ -11,7 +11,7 @@ export const getPresets = async (): Promise<PresetResponseType> => {
 
 export const getPresetByCode = async (code: string, id: number): Promise<ComponentsResponseType> => {
   try {
-    const res = await api.get<ComponentsResponseType>(ROUTE_API.PRESET_CODE, { params: { code, id } });
+    const res = await api.get<ComponentsResponseType>(ROUTE_API.PRESET_CODE(code), { params: { id } });
     return res.data;
   } catch (err: unknown) {
     if (err instanceof AxiosError) {

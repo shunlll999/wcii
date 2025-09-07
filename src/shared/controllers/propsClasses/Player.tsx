@@ -1,4 +1,4 @@
-import { Expose } from '@Inspector/meta/decorators';
+import { Expose } from '@Shared/controllers/meta/decorators';
 import React from 'react';
 
 export class Player {
