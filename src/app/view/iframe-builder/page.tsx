@@ -47,6 +47,7 @@ export default function IframeCanvasPage() {
     value: PresetType | null
   ): PresetType[] => {
     const nodeCopy = [...nodes];
+    console.log('nodeCopy', nodeCopy);
     if (path.length === 1 && typeof path[0] === 'number') {
       if (value) nodeCopy[path[0]] = value;
       else nodeCopy.splice(path[0], 1);
@@ -132,6 +133,7 @@ export default function IframeCanvasPage() {
 
   const onDragOverElement = (event: React.DragEvent<HTMLDivElement>, node: PresetType) => {
     event.preventDefault();
+    event.dataTransfer.effectAllowed = 'move';
     dragOverNode.current = node.sourceId ?? null;
   };
 
@@ -241,8 +243,6 @@ export default function IframeCanvasPage() {
 
     clearHighlight();
   };
-
-  console.log('layout', layout);
 
   // ------------------------ BIND EVENTS ------------------------ //
   useEffect(() => {
