@@ -2,7 +2,7 @@
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { use, useEffect, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
@@ -243,6 +243,7 @@ export default function IframeCanvasPage() {
   };
 
   const onSignalAddElement = (node: PresetType) => {
+    console.log('onSignalAddElement', node);
     positionStore.getState().setLayout([...layout, { ...node, sourceId: uuid() }]);
     setLayout(prevLayout => [...prevLayout, { ...node, sourceId: uuid() }]);
   };
@@ -282,8 +283,16 @@ export default function IframeCanvasPage() {
   }, []);
 
   useEffect(() => {
+    if (layout.length === 0) return;
     positionStore.getState().setLayout(layout);
   }, [layout]);
+
+  useEffect(() => {
+    const storedLayout = positionStore.getState().layouts;
+    if (storedLayout.length > 0) {
+      setLayout(storedLayout);
+    }
+  }, []);
 
   const elementObject = (node: PresetType) => ({
     'text-code':  <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
