@@ -10,7 +10,7 @@ import {
   SecureChannelTypeWithRequiredPayload,
 } from '@Shared/modules/channel';
 import { CHANNEL_NAME } from '@Shared/constants';
-import { Column, Container } from '@Shared/components/ui';
+import { Column, Container, NavigationBar } from '@Shared/components/ui';
 import { positionStore } from '@Shared/stores/layoutStore';
 
 export default function IframeCanvasPage() {
@@ -60,7 +60,6 @@ export default function IframeCanvasPage() {
     value: PresetType | null
   ): PresetType[] => {
     const nodeCopy = [...nodes];
-    console.log('nodeCopy', nodeCopy);
     if (path.length === 1 && typeof path[0] === 'number') {
       if (value) nodeCopy[path[0]] = value;
       else nodeCopy.splice(path[0], 1);
@@ -216,8 +215,7 @@ export default function IframeCanvasPage() {
 
         targetArray.splice(insertIndex, 0, sourceNode);
         // dragOverNode.current = null;
-        const mapSeq = newLayout.map((n, i) => ({ ...n, seq: i }));
-        return [...mapSeq];
+        return [...newLayout];
       }
       // CASE 2: Insert new node from sidebar preset
       const newNode: PresetType = {
@@ -240,8 +238,7 @@ export default function IframeCanvasPage() {
 
       targetArray.splice(insertIndex, 0, newNode);
       // dragOverNode.current = null;
-      const mapSeq = newLayout.map((n, i) => ({ ...n, seq: i }));
-      return [...mapSeq];
+      return [...newLayout];
     });
   };
 
@@ -300,7 +297,8 @@ export default function IframeCanvasPage() {
     //         {node.children?.map(c => renderNode(c, node.sourceId))}
     //       </div>
     'container-code': <Container />,
-    'column-code': <Column />
+    'column-code': <Column />,
+    'navbar-code': <NavigationBar />
 
   })
 

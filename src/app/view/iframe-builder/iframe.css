@@ -51,12 +51,13 @@
 }
 .node {
   border: 1px dashed var(--border-node-background);
-  padding: 12px;
-  border-radius: 10px;
+  /* padding: 12px; */
+  /* border-radius: 10px; */
   margin: 8px 0;
   background: var(--node-background);
   outline-offset: 4px;
   transition: border 0.3s ease;
+  overflow: hidden;
 }
 
 .node:hover {
@@ -88,6 +89,7 @@
   box-shadow: var(--gradient-shadow-node);
   transition: all 0.15s ease;
   animation: insertTopPulse 500ms infinite;
+  z-index: 99999;
 }
 .g-insert-after {
   border: 1px dashed var(--g-insert-before);
@@ -95,6 +97,7 @@
   box-shadow: var(--gradient-shadow-node);
   transition: all 0.15s ease;
   animation: insertButtomPulse 500ms infinite;
+  z-index: 99999;
 }
 
 @keyframes insertButtomPulse {

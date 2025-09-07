@@ -1,0 +1,28 @@
+import { ReactNode } from 'react';
+const <%componentName%> = (props) => {
+  return (
+    <div className={props.className.container}>
+      <div className={props.className.paragraph}>{props.children}</div>
+    </div>
+  );
+}
+
+<%componentName%>.metadata = {
+  name: "<%componentName%>",
+  category: "<%componentName%>",
+  type: 'widget',
+  id: 16,
+  code: 'navbar-code',
+  icon: "CropSquareOutlinedIcon",
+  description: "A simple navbar component",
+  props: {
+    className: {
+      container: "className",
+      paragraph: "className"
+    },
+    children: { type: "ReactNode" }
+  }
+}
+
+export default <%componentName%>
+
