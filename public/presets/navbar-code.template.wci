@@ -1,10 +1,13 @@
 import { ReactNode } from 'react';
 const <%componentName%> = (props) => {
   return (
-    <div className={props.className.container}>
-      <div className={props.className.paragraph}>{props.children}</div>
-    </div>
-  );
+      <div className={props.className.container}>
+        <div className="logo" />
+        <ul className="menu-list">
+          {props.children}
+        </ul>
+      </div>
+    );
 }
 
 <%componentName%>.metadata = {
@@ -20,7 +23,8 @@ const <%componentName%> = (props) => {
       container: "className",
       paragraph: "className"
     },
-    children: { type: "ReactNode" }
+    children: { type: "ReactNode" },
+    navigationLinks:[],
   }
 }
 

@@ -49,6 +49,11 @@
   outline-offset: 4px;
   transition: border 0.3s ease;
 }
+
+.content-render {
+  margin: 0 auto 8px;
+}
+
 .node {
   border: 1px dashed var(--border-node-background);
   /* padding: 12px; */

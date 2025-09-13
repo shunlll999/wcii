@@ -1,0 +1,34 @@
+:root {
+  --spinner-track:#94a3b8;
+  --spinner-arc: #076cf9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --spinner-track:#94a3b8;
+    --spinner-arc: #9f6cf7;
+  }
+}
+
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.spinner {
+  transform-origin:center;
+  animation:spinner_AtaB .75s infinite linear;
+}
+
+@keyframes spinner_AtaB {
+  100% {
+    transform:rotate(360deg);
+  }
+}

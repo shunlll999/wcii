@@ -2,7 +2,7 @@
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, { use, useEffect, useRef, useState } from 'react';
+import React, {  useEffect, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
@@ -10,7 +10,7 @@ import {
   SecureChannelTypeWithRequiredPayload,
 } from '@Shared/modules/channel';
 import { CHANNEL_NAME } from '@Shared/constants';
-import { Column, Container, NavigationBar } from '@Shared/components/ui';
+import { Column, Container, NavigationBar, NavigationPropsType } from '@Shared/components/ui';
 import { positionStore } from '@Shared/stores/layoutStore';
 
 export default function IframeCanvasPage() {
@@ -294,6 +294,14 @@ export default function IframeCanvasPage() {
     }
   }, []);
 
+  const links: NavigationPropsType['linkProps'] = [
+    { title: 'Home', href: '#' },
+    { title: 'About', href: '#' },
+    { title: 'ContactAAA', href: '#' }
+  ];
+
+  const NavigationMeta = NavigationBar.metadata
+
   const elementObject = (node: PresetType) => ({
     'text-code':  <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
     'button-code': <button>Button</button>,
@@ -307,7 +315,7 @@ export default function IframeCanvasPage() {
     //       </div>
     'container-code': <Container />,
     'column-code': <Column />,
-    'navbar-code': <NavigationBar />
+    'navbar-code': <NavigationBar meta={NavigationMeta} linkProps={links} />
 
   })
 

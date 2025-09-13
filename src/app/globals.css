@@ -3,6 +3,8 @@
   --foreground: #171717;
   --header-background: #171717;
   --hover-preset: linear-gradient(45deg, #743ad5, #d53a9d);
+  --normal-preset: linear-gradient(45deg, #d53a7d, #7625bc);
+  --border-drop-target: #7c3aed33;
 }
 
 @media (prefers-color-scheme: dark) {

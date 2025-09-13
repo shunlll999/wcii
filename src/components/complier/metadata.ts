@@ -1,5 +1,11 @@
 import type { ComponentType } from 'react';
 
+export type PropsType =  Record<
+    string,
+    | { type: 'string' | 'number' | 'boolean' | 'ReactNode' | 'className' }
+    | Record<string, unknown> // เผื่อกรณีซ้อน
+  >;
+
 export type ComponentMetadata = {
   name: string;
   category: string;
@@ -8,11 +14,7 @@ export type ComponentMetadata = {
   type: 'base' | 'widget' | 'layout';
   icon?: string;
   id?: number;
-  props?: Record<
-    string,
-    | { type: 'string' | 'number' | 'boolean' | 'ReactNode' | 'className' }
-    | Record<string, unknown> // เผื่อกรณีซ้อน
-  >;
+  props?: PropsType;
 };
 
 export type WithMetadata<P = Record<string, unknown>> =
