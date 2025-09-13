@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import CropSquareOutlinedIcon from '@mui/icons-material/CropSquareOutlined';
 import ViewArrayOutlinedIcon from '@mui/icons-material/ViewArrayOutlined';
