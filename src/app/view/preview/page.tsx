@@ -48,15 +48,8 @@ const Preview = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        minHeight: '100vh',
-        background: 'var(--background)',
-        color: 'var(--foreground)',
-      }}
-    >
-        {layout.map(n => renderNode(n))}
+    <div className='canvas-container'>
+      {layout.map(n => renderNode(n))}
     </div>
   );
 };

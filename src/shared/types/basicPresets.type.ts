@@ -9,7 +9,7 @@ type PresetType = {
   sourceId?: string,
   props?: Record<string, unknown>;
   children?: PresetType[],
-  metadata?: Record<string, unknown>[],
+  metadata?: Record<string, unknown>,
 }
 
 type ComponentsResponseType = {

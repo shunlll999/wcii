@@ -15,5 +15,6 @@ export const CHANNEL_NAME = {
   NAVIGATION: 'navigation_channel',
   PRESET: 'preset_channel',
   COMPONENT: 'component_channel',
-  PAGE: 'page_channel'
+  PAGE: 'page_channel',
+  INSPECTOR: 'inspector_channel'
 }

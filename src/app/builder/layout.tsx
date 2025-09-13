@@ -3,6 +3,7 @@ import { Navigation } from '@Components/builder/base/Navigation';
 import { ThemeRegistry } from '@Components/builder/base/ThemeRegistry';
 import { ClientProviders } from '@Components/builder/base/ClientProvider';
 import { getPresets } from '@Shared/libs/present';
+import { Inspector } from '@Shared/components/ui/inspector';
 
 type BuilderLayoutProps = {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ export default async function BuilderLayout({ children }: BuilderLayoutProps) {
             </nav>
             <section className={styles.section}>{children}</section>
             <nav>
-              Inspector Panel
+              <Inspector instance={{ test: '123' }} />
             </nav>
           </main>
         </div>

@@ -6,7 +6,7 @@
   flex-direction: column;
   width: 350px;
   height: calc(100vh - 60px);
-  background-color: var(--background);
+  background-color: var(--gray-lt-alpha-100);
   padding: 16px;
   transition: all 0.5s cubic-bezier(0.83, 0, 0.17, 1);
 }

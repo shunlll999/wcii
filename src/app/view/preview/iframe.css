@@ -26,6 +26,19 @@
   }
 }
 
+.canvas-container {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.canvas-container-empty {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem
+}
 
 .canvas {
   height: 100vh;
