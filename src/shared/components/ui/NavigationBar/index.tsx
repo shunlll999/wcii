@@ -1,9 +1,10 @@
 import StringCompiler from '@Components/complier/StringCompiler';
 import { withMetadata } from '@Shared/controllers/meta/withMatadata';
 import type { Metadata } from '@Shared/controllers/meta/withMatadata.type';
-import { getPresetByCode } from '@Shared/libs/present';
+import { getPresetByCode, getPresetStyleByCode } from '@Shared/libs/present';
 import { Fragment, useEffect, useState } from 'react';
 import './navigation.css';
+import SpinLoader from '../spin';
 
 export type Links ={
   title: string;
@@ -25,7 +26,7 @@ const NavigationBase: React.FC<{ meta: Metadata; linkProps?: Links[] }> = ({ met
     const fetchData = async () => {
       setLoading(true);
       const response = await getPresetByCode(meta.code, meta.id ?? 0);
-      const css = await fetch(`/assets/css/${meta.code}/index.css`).then(res => res.text());
+      const { css } = await getPresetStyleByCode(meta.code);
       setCSSData(css);
       setReactData({ ...response });
       setLoading(false);
@@ -33,18 +34,9 @@ const NavigationBase: React.FC<{ meta: Metadata; linkProps?: Links[] }> = ({ met
     fetchData();
   }, [meta.code, meta.id]);
 
-  console.log('meta', meta);
-
   return (
     <div style={{ position: 'relative' }}>
-      {loading && (
-        <div className='loading-container'  >
-          <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" fill='var(--spinner-track)' opacity=".25"/>
-            <path d="M10.14,1.16a11,11,0,0,0-9,8.92A1.59,1.59,0,0,0,2.46,12,1.52,1.52,0,0,0,4.11,10.7a8,8,0,0,1,6.66-6.61A1.42,1.42,0,0,0,12,2.69h0A1.57,1.57,0,0,0,10.14,1.16Z" fill="var(--spinner-arc)" className="spinner"/>
-          </svg>
-        </div>
-      )}
+      {loading && <SpinLoader />}
       {reactData?.error && <div>Error: {reactData.error}</div>}
       {reactData?.template && (
         <StringCompiler

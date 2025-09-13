@@ -66,5 +66,13 @@
   font-size: 16px;
   font-weight: 500;
   border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-list li a:hover {
+  background-color: var(--spinner-arc);
+  color: white;
   transition: background-color 0.3s ease, color 0.3s ease;
 }

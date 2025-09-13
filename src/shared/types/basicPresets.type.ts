@@ -18,6 +18,11 @@ type ComponentsResponseType = {
   id: number,
   error?: string
 }
+
+type CSSResponseType = {
+  css: string,
+  error?: string
+}
 type PresetMode = {
   basic: IPresetQueue,
   form: IPresetQueue,
@@ -47,5 +52,6 @@ export type {
   PresetResponseType,
   ComponentsResponseType,
   NodeType,
-  ILayoutNode
+  ILayoutNode,
+  CSSResponseType
 }

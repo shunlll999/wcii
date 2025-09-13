@@ -1,5 +1,5 @@
 import { ROUTE_API } from '@Shared/constants';
-import { ComponentsResponseType, PresetResponseType } from '@Shared/types';
+import { ComponentsResponseType, CSSResponseType, PresetResponseType } from '@Shared/types';
 import { api, AxiosError } from './api';
 
 export const getPresets = async (): Promise<PresetResponseType> => {
@@ -18,5 +18,17 @@ export const getPresetByCode = async (code: string, id: number): Promise<Compone
       return { id: 0, template: '', code: '', error: err.response?.data.error };
     }
     return { id: 0, template: '', code: '', error: err as string };
+  }
+}
+
+export const getPresetStyleByCode = async (code: string): Promise<CSSResponseType> => {
+  try {
+    const res = await api.get<CSSResponseType>(ROUTE_API.PRESET_STYLE_CODE(code));
+    return res.data;
+  } catch (err: unknown) {
+    if (err instanceof AxiosError) {
+      return { css: '' , error: err.response?.data.error };
+    }
+    return { css: '', error: err as string };
   }
 }

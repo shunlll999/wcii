@@ -10,9 +10,9 @@ const Preview = () => {
   const [layout, setLayout] = useState<PresetType[]>([]);
 
     const links: NavigationPropsType['linkProps'] = [
-      { title: 'Home', href: '#' },
-      { title: 'About', href: '#' },
-      { title: 'ContactAAA', href: '#' }
+      { title: 'Home', href: '#home' },
+      { title: 'About', href: '#about' },
+      { title: 'Contact', href: '#contact' }
     ];
 
     const navigationMeta = NavigationBar.metadata

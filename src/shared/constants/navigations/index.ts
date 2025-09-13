@@ -7,7 +7,8 @@ export const PAGE_URL = {
 
 export const ROUTE_API = {
   NAVIGATION: '/api/navigation',
-  PRESET_CODE: (code: string) => `/api/preset/${code}`
+  PRESET_CODE: (code: string) => `/api/preset/${code}`,
+  PRESET_STYLE_CODE: (code: string) => `/api/preset/style/${code}`
 }
 
 export const CHANNEL_NAME = {
