@@ -100,7 +100,7 @@ export function Inspector({ instance }: { instance: any }) {
           <label>{key}: </label>
           <input
             type={typeof value === 'number' ? 'number' : 'text'}
-            defaultValue={value}
+            value={value as string | number}
             onChange={e => propertyChange(e, key, value)}
           />
         </div>
