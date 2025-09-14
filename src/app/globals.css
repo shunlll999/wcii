@@ -1,3 +1,22 @@
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('/fonts/BarlowCondensed-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+ @font-face {
+  font-family: 'BarlowCondensed';
+  src: url('/fonts/BarlowCondensed-SemiBold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'BarlowCondensed';
+  src: url('/fonts/BarlowCondensed-Medium.ttf') format('truetype');
+  font-weight: medium;
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

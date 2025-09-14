@@ -19,7 +19,6 @@ import CommentBankOutlinedIcon from '@mui/icons-material/CommentBankOutlined';
 import ArtTrackOutlinedIcon from '@mui/icons-material/ArtTrackOutlined';
 import { PresetResponseType, PresetType } from '@Shared/types';
 import styles from './navigation.module.css';
-import { getPresetByCode } from '@Shared/libs/present';
 import React, { useEffect, useRef, useState } from 'react';
 import StringCompiler from '@Components/complier/StringCompiler';
 import { Box, Modal, Typography } from '@mui/material';

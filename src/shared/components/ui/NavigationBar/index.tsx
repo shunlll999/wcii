@@ -1,10 +1,10 @@
 import StringCompiler from '@Components/complier/StringCompiler';
 import { withMetadata } from '@Shared/controllers/meta/withMatadata';
 import type { Metadata } from '@Shared/controllers/meta/withMatadata.type';
-import { getPresetByCode, getPresetStyleByCode } from '@Shared/libs/present';
 import { Fragment, useEffect, useState } from 'react';
 import './navigation.css';
 import SpinLoader from '../spin';
+import { getPresetByCode, getPresetStyleByCode } from '@Shared/services/presets';
 
 export type Links ={
   title: string;
