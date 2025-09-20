@@ -1,3 +1,26 @@
+:root {
+  --filter-inverted-value: invert(85%);
+  --dot-color: #adadad88;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --filter-inverted-value: invert(0);
+    --dot-color: #383838;
+  }
+}
+
+#home {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--background);
+  background-image: radial-gradient(circle at center, var(--dot-color) 1px, var(--background) 0);
+  background-size: 1rem 1rem;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
 .facebook, .x, .instagram, .github, .linkedin {
   display: block;
   width: 32px;
@@ -6,6 +29,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
+  filter: var(--filter-inverted-value);
 }
 
 .facebook:hover, .x:hover, .instagram:hover, .github:hover, .linkedin:hover {
@@ -48,6 +72,7 @@
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
+  filter: var(--filter-inverted-value);
 }
 
 .web:hover {
