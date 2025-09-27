@@ -16,5 +16,6 @@ export const CHANNEL_NAME = {
   PRESET: 'preset_channel',
   COMPONENT: 'component_channel',
   PAGE: 'page_channel',
-  INSPECTOR: 'inspector_channel'
+  INSPECTOR: 'inspector_channel',
+  STORE: 'store_update_channel'
 }

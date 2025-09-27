@@ -312,6 +312,9 @@ export default function IframeCanvasPage() {
       // dragOverNode.current = null;
       return [...newLayout];
     });
+
+    const navigationChannel = navigationChannelRef.current.navigation;
+    navigationChannel?.send('iframe', PresetAction.UPDATE, payload);
   };
 
   const onSignalAddElement = (node: PresetType) => {

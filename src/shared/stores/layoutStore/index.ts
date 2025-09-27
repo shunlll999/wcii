@@ -1,6 +1,8 @@
 import { createStore } from 'zustand/vanilla'
-import { persist } from 'zustand/middleware'
+import { persist, subscribeWithSelector } from 'zustand/middleware'
 import { PresetType } from '@Shared/types'
+import { createSecureChannel } from '@Shared/modules/channel'
+import { CHANNEL_NAME } from '@Shared/constants'
 
 type LayoutStoreState = { layouts: PresetType[] }
 
@@ -11,12 +13,22 @@ type LayoutStoreActions = {
 type LayoutStore = LayoutStoreState & LayoutStoreActions
 
 const positionStore = createStore<LayoutStore>()(
-  persist(
+  subscribeWithSelector(persist(
     (set) => ({
       layouts: [],
       setLayout: (layout) => set({ layouts: layout }),
     }),
     { name: 'position-storage' },
-  ),
+  )),
 )
-export { positionStore }
+
+const channel = createSecureChannel<PresetType[]>(CHANNEL_NAME.STORE, (message) => {
+  console.log('STORE', message);
+});
+
+
+const unsubPositionStore: () => void = positionStore.subscribe((state: LayoutStoreState) => {
+  channel.send(CHANNEL_NAME.STORE, 'STORE', positionStore.getState().layouts);
+});
+
+export { positionStore, unsubPositionStore }

@@ -6,9 +6,9 @@ import { toPascalCase } from '@Shared/utils/allCapital';
 
 export const getPresets = async (): Promise<PresetResponseType> => {
     const navigation: PresetResponseType = { data: {
-      basic: { seq: 1, data: PRESETS_MOCK },
-      form: { seq: 2, data: PRESETS_MOCK_FORM },
-      extra: { seq: 3, data: PRESETS_MOCK_EXTRA },
+      basic: { seq: 2, data: PRESETS_MOCK },
+      form: { seq: 3, data: PRESETS_MOCK_FORM },
+      extra: { seq: 1, data: PRESETS_MOCK_EXTRA },
     }, type: 'presets' };
 
   return navigation;

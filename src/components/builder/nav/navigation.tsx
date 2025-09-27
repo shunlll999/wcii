@@ -22,11 +22,18 @@ import styles from './navigation.module.css';
 import React, { useEffect, useRef, useState } from 'react';
 import StringCompiler from '@Components/complier/StringCompiler';
 import { Box, Modal, Typography } from '@mui/material';
-import { BaseMessage, createSecureChannel, SecureChannelTypeWithRequiredPayload, } from '@Shared/modules/channel';
+import {
+  BaseMessage,
+  createSecureChannel,
+  SecureChannelTypeWithRequiredPayload,
+} from '@Shared/modules/channel';
 import { CHANNEL_NAME } from '@Shared/constants';
 import { PresetAction } from '@Shared/types/dispatch.type';
 import { Metadata } from '@Shared/controllers/meta/withMatadata.type';
 import { withMetadata } from '@Shared/controllers/meta/withMatadata';
+import classname from 'classnames';
+import { useLayout } from '@Shared/hooks/useLayout';
+import { positionStore } from '@Shared/stores/layoutStore';
 
 const style = {
   position: 'absolute',
@@ -46,10 +53,19 @@ type NavigationProps = {
 
 type NavigationMetaDataType = NavigationProps & { meta: Metadata };
 
-const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: NavigationMetaDataType) => {
+const NavigationBase: React.FC<NavigationMetaDataType> = ({
+  presets,
+  meta,
+}: NavigationMetaDataType) => {
   const { data } = presets;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigationChannelRef = useRef<Record<string, SecureChannelTypeWithRequiredPayload | undefined>>({});
+  const [isBasicOpen, setIsBasicOpen] = useState<string>('');
+  const [isFormOpen, setIsFormOpen] = useState<string>('');
+  const [isExtraOpen, setIsExtraOpen] = useState<string>('');
+  const hierarchies = useLayout();
+  const navigationChannelRef = useRef<
+    Record<string, SecureChannelTypeWithRequiredPayload | undefined>
+  >({});
   const [reactData, setReactData] = useState<{ template: string; code: string; error?: string }>({
     template: '',
     code: '',
@@ -67,7 +83,7 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: Nav
     //   setReactData({ ...response });
     // }
     const navigationChannel = navigationChannelRef.current.navigation;
-     navigationChannel?.send(meta.name, PresetAction.ADD, data)
+    navigationChannel?.send(meta.name, PresetAction.ADD, data);
   };
 
   const icon = {
@@ -94,9 +110,18 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: Nav
     event.dataTransfer.effectAllowed = 'copy';
   };
 
+  const onSectionController = (key:string) => {
+    switch (key) {
+      case 'basic': setIsBasicOpen(isBasicOpen === '' ? 'open' : ''); setIsFormOpen(''); setIsExtraOpen(''); break;
+      case 'form': setIsFormOpen(isFormOpen === 'open' ? '' : 'open'); setIsBasicOpen('');  setIsExtraOpen('');break;
+      case 'extra': setIsExtraOpen(isExtraOpen === 'open' ? '' : 'open'); setIsFormOpen(''); setIsBasicOpen('');break;
+      default: break;
+    }
+  }
+
   useEffect(() => {
     const channel = createSecureChannel(CHANNEL_NAME.NAVIGATION, (message: BaseMessage) => {
-      console.log('navigation', message);
+      console.log('message.from', message.from);
     });
 
     navigationChannelRef.current.navigation = channel;
@@ -107,11 +132,19 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: Nav
     };
   }, []);
 
+  const mapKeys = {
+    basic: isBasicOpen,
+    form: isFormOpen,
+    extra: isExtraOpen,
+  } as const;
+
   return (
     <div className={styles.nav}>
-      <div>
+      <div className={styles['section-hierarchy']}>
         <div className={styles['section-header']}>Hierarchy</div>
-        <div className={styles['section-content']}>Item 1</div>
+        <ul className={styles['section-hierarchy-list']}>
+        {hierarchies.map((item) => <li key={item.sourceId}>{item.name}</li>)}
+        </ul>
       </div>
       <div>
         {data &&
@@ -119,8 +152,12 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: Nav
             .sort(([, a], [, b]) => a.seq - b.seq)
             .map(([key, item]) => (
               <div key={key}>
-                <div className={styles['section-header']}>{key}</div>
-                <div className={styles['section-item']}>
+                <div className={styles['section-header']} onClick={() => onSectionController(key.toLocaleLowerCase())}>{key}</div>
+                <div className={classname(
+                  styles['section-item'],
+                  styles['section-controller'],
+                  styles[`${key.toLocaleLowerCase()}-${mapKeys[key.toLocaleLowerCase() as keyof typeof mapKeys]}`]
+                )}>
                   {item.data.map(data => {
                     return (
                       <div
@@ -140,6 +177,9 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({ presets, meta }: Nav
                 </div>
               </div>
             ))}
+      </div>
+       <div>
+        <div className={styles['section-version']}>{`:: wcii version DEMO (${new Date().toLocaleString()})`}</div>
       </div>
       {reactData.template && (
         <StringCompiler
