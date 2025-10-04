@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, { use, useEffect, useRef, useState } from 'react';
+import React, {  forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
@@ -10,8 +11,95 @@ import {
   SecureChannelTypeWithRequiredPayload,
 } from '@Shared/modules/channel';
 import { CHANNEL_NAME } from '@Shared/constants';
-import { Column, Container, NavigationBar } from '@Shared/components/ui';
+import { Column, Container, NavigationBar, NavigationPropsType } from '@Shared/components/ui';
 import { positionStore } from '@Shared/stores/layoutStore';
+import { Metadata } from '@Shared/controllers/meta/withMatadata.type';
+import { PresetAction } from '@Shared/types/dispatch.type';
+
+
+type LayoutNode = {
+  children: React.ReactNode,
+  mapData: {
+    meta: Metadata,
+    data: unknown,
+    propName: string,
+    node: PresetType,
+  },
+};
+
+function getTagName(value: unknown) {
+  return Object.prototype.toString.call(value).replace(/^\[object |\]$/g, "").toLocaleLowerCase();
+}
+
+// สมมติว่ามี type แบบนี้
+type ElementControlProps = LayoutNode;
+export type ElementControlHandle = {
+  onWidgetAction: () => void;
+  onActiveNode: (value: boolean) => void;
+};
+
+
+const ElementControl = forwardRef<ElementControlHandle, ElementControlProps>(
+  ({ children, mapData }, ref) => {
+    //--------------- CHANNEL --------------- //
+    const inspectorChannelRef = useRef<
+      Record<string, SecureChannelTypeWithRequiredPayload | undefined>
+    >({});
+    const [activeNode, setActiveNode] = useState<boolean>(false);
+
+    // ฟังก์ชันที่จะ expose ออกไป
+    const onWidgetAction = () => {
+      const { data, meta, propName, node } = mapData;
+
+      const propsData = {
+        type: getTagName(data),
+        value: data
+      };
+
+      const newMeta = {
+        ...meta,
+        props: {
+          [propName]: propsData
+        }
+      };
+
+      const applyNode = {
+        ...node,
+        metadata: newMeta,
+        props: {
+          ...node.props,
+          [propName]: propsData
+        }
+      };
+
+      console.log('applyNode::>>>', applyNode);
+
+      inspectorChannelRef.current.inspector?.send(
+        newMeta.name,
+        PresetAction.OPEN_INSPECTOR,
+        applyNode
+      );
+    };
+
+    const onActiveNode = (value: boolean) => {
+      setActiveNode(value)
+    }
+
+    // expose method ให้ parent เรียกได้ผ่าน ref
+    useImperativeHandle(ref, () => ({
+      onWidgetAction,
+      onActiveNode
+    }));
+
+    return (
+      <div className={activeNode ? 'node-action' : ''} onClick={onWidgetAction}>
+        {children}
+      </div>
+    );
+  }
+);
+
+ElementControl.displayName = 'ElementControl';
 
 export default function IframeCanvasPage() {
   const [layout, setLayout] = useState<PresetType[]>([]);
@@ -220,10 +308,12 @@ export default function IframeCanvasPage() {
       // CASE 2: Insert new node from sidebar preset
       const newNode: PresetType = {
         ...payload,
-        metadata: [{ name: payload.name, value: payload.code }],
+        metadata: { name: payload.name, value: payload.code },
         sourceId: uuid(),
         children: payload.code === 'container-code' ? [] : undefined,
       };
+
+
 
       const parentPath = parentId ? findNodePath(newLayout, parentId) : [];
       const targetArray = parentPath
@@ -240,10 +330,12 @@ export default function IframeCanvasPage() {
       // dragOverNode.current = null;
       return [...newLayout];
     });
+
+    const navigationChannel = navigationChannelRef.current.navigation;
+    navigationChannel?.send('iframe', PresetAction.UPDATE, payload);
   };
 
   const onSignalAddElement = (node: PresetType) => {
-    console.log('onSignalAddElement', node);
     positionStore.getState().setLayout([...layout, { ...node, sourceId: uuid() }]);
     setLayout(prevLayout => [...prevLayout, { ...node, sourceId: uuid() }]);
   };
@@ -263,19 +355,15 @@ export default function IframeCanvasPage() {
     const navigationChannel = createSecureChannel(
       CHANNEL_NAME.NAVIGATION,
       (message: BaseMessage) => {
-        console.log('view', message);
         onSignalAddElement(message.payload);
       }
     );
 
     navigationChannelRef.current.navigation = navigationChannel;
-
     return () => {
       navigationChannel?.close();
       delete navigationChannelRef.current.navigation;
-
       abortController.abort();
-
       dropzone.removeEventListener('dragover', onDragOver);
       dropzone.removeEventListener('drop', onDrop);
       dropzone.removeEventListener('dragleave', onDragLeave);
@@ -294,6 +382,14 @@ export default function IframeCanvasPage() {
     }
   }, []);
 
+  const links: NavigationPropsType['linkProps'] = [
+    { title: 'Home', href: '#' },
+    { title: 'About', href: '#' },
+    { title: 'ContactAAA', href: '#' }
+  ];
+
+  const elementControlRef = useRef<ElementControlHandle>(null);
+
   const elementObject = (node: PresetType) => ({
     'text-code':  <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
     'button-code': <button>Button</button>,
@@ -307,10 +403,9 @@ export default function IframeCanvasPage() {
     //       </div>
     'container-code': <Container />,
     'column-code': <Column />,
-    'navbar-code': <NavigationBar />
+    'navbar-code': <ElementControl ref={elementControlRef} mapData={{ meta: NavigationBar.metadata, data: links, propName: 'navigationLinks', node }}><NavigationBar meta={NavigationBar.metadata} linkProps={links} /></ElementControl>
 
   })
-
 
   const renderNode = (node: PresetType, parentId?: string) => {
     const isHighlighted = dragOverNode.current === node.sourceId;

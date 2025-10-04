@@ -1,0 +1,44 @@
+{
+  "hosting": {
+    "public": "out",
+    "headers": [
+      { "source":"/service-worker.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}] }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/home/index.html"
+      },
+      {
+        "source": "/home",
+        "destination": "/home/index.html"
+      },
+      {
+        "source": "/builder",
+        "destination": "/builder/index.html"
+      },
+      {
+        "source": "/view/iframe-builder",
+        "destination": "/view/iframe-builder/index.html"
+      },
+       {
+        "source": "/view/preview",
+        "destination": "/view/preview/index.html"
+      },
+      {
+        "source": "/brodcast/builder",
+        "destination": "/brodcast/builder/index.html"
+      },
+      {
+        "source": "/brodcast/view",
+        "destination": "/brodcast/view/index.html"
+      }
+    ]
+  }
+}

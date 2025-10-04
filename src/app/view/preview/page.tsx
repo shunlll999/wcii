@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
-import { Column, Container, NavigationBar } from '@Shared/components/ui';
+import { Column, Container, NavigationBar, NavigationPropsType } from '@Shared/components/ui';
 import { positionStore } from '@Shared/stores/layoutStore';
 import { PresetType } from '@Shared/types';
 import { useEffect, useState } from 'react';
@@ -7,6 +8,15 @@ import './iframe.css';
 
 const Preview = () => {
   const [layout, setLayout] = useState<PresetType[]>([]);
+
+    const links: NavigationPropsType['linkProps'] = [
+      { title: 'Home', href: '#home' },
+      { title: 'About', href: '#about' },
+      { title: 'Contact', href: '#contact' }
+    ];
+
+    const navigationMeta = NavigationBar.metadata
+
   const elementObject = (node: PresetType) => ({
     'text-code': <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
     'button-code': <button>Button</button>,
@@ -19,12 +29,12 @@ const Preview = () => {
     ),
     'container-code': <Container />,
     'column-code': <Column />,
-    'navbar-code': <NavigationBar />,
+    'navbar-code': <NavigationBar meta={navigationMeta} linkProps={links} />,
   });
 
   const renderNode = (node: PresetType) => {
     return (
-      <div key={node.sourceId}>
+      <div className='content-render' key={node.sourceId}>
         {elementObject(node)[node.code as keyof typeof elementObject]}
       </div>
     );
@@ -38,15 +48,8 @@ const Preview = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        minHeight: '100vh',
-        background: 'var(--background)',
-        color: 'var(--foreground)',
-      }}
-    >
-        {layout.map(n => renderNode(n))}
+    <div className='canvas-container'>
+      {layout.map(n => renderNode(n))}
     </div>
   );
 };

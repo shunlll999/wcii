@@ -7,12 +7,15 @@ export const PAGE_URL = {
 
 export const ROUTE_API = {
   NAVIGATION: '/api/navigation',
-  PRESET_CODE: (code: string) => `/api/preset/${code}`
+  PRESET_CODE:  '/api/preset',
+  PRESET_STYLE_CODE: '/api/preset/style'
 }
 
 export const CHANNEL_NAME = {
   NAVIGATION: 'navigation_channel',
   PRESET: 'preset_channel',
   COMPONENT: 'component_channel',
-  PAGE: 'page_channel'
+  PAGE: 'page_channel',
+  INSPECTOR: 'inspector_channel',
+  STORE: 'store_update_channel'
 }

@@ -2,8 +2,8 @@ import StringCompiler from "@Components/complier/StringCompiler";
 import { v4 as uuid } from 'uuid'
 import { withMetadata } from "@Shared/controllers/meta/withMatadata";
 import type { Metadata } from "@Shared/controllers/meta/withMatadata.type";
-import { getPresetByCode } from "@Shared/libs/present";
 import { useEffect, useState } from "react";
+import { getPresetByCode } from "@Shared/services/presets";
 
 const ColumnBase: React.FC<{ meta: Metadata }> = ({ meta }: { meta: Metadata }) => {
   const [reactData, setReactData] = useState<{ template: string; code: string; error?: string }>();

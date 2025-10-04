@@ -9,13 +9,18 @@ type PresetType = {
   sourceId?: string,
   props?: Record<string, unknown>;
   children?: PresetType[],
-  metadata?: Record<string, unknown>[],
+  metadata?: Record<string, unknown>,
 }
 
 type ComponentsResponseType = {
   code: string,
   template: string,
   id: number,
+  error?: string
+}
+
+type CSSResponseType = {
+  css: string,
   error?: string
 }
 type PresetMode = {
@@ -47,5 +52,6 @@ export type {
   PresetResponseType,
   ComponentsResponseType,
   NodeType,
-  ILayoutNode
+  ILayoutNode,
+  CSSResponseType
 }

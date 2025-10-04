@@ -12,7 +12,7 @@ export interface SignedMessage<T = unknown> extends BaseMessage<T> {
   signature: string;
 }
 
-export interface SecureChannelOprions {
+export interface SecureChannelOptions {
   MAX_AGE_MS?: number;
   MAX_FUTURE_SKEW_MS?: number;
   CLEANUP_INTERNAL_MS?: number;

@@ -26,6 +26,19 @@
   }
 }
 
+.canvas-container {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.canvas-container-empty {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem
+}
 
 .canvas {
   height: 100vh;
@@ -49,6 +62,11 @@
   outline-offset: 4px;
   transition: border 0.3s ease;
 }
+
+.content-render {
+  margin: 0 auto 8px;
+}
+
 .node {
   border: 1px dashed var(--border-node-background);
   /* padding: 12px; */

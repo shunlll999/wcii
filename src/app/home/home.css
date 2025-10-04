@@ -1,0 +1,110 @@
+:root {
+  --filter-inverted-value: invert(85%);
+  --dot-color: #adadad88;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --filter-inverted-value: invert(0);
+    --dot-color: #383838;
+  }
+}
+
+#home {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--background);
+  background-image: radial-gradient(circle at center, var(--dot-color) 1px, var(--background) 0);
+  background-size: 1rem 1rem;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+}
+
+.facebook, .x, .instagram, .github, .linkedin {
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-image: url('/assets/images/svg/facebook.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  filter: var(--filter-inverted-value);
+}
+
+.facebook:hover, .x:hover, .instagram:hover, .github:hover, .linkedin:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.instagram {
+  background-image: url('/assets/images/svg/instagram.svg');
+}
+
+.x {
+  background-image: url('/assets/images/svg/x.svg');
+}
+
+.github {
+  background-image: url('/assets/images/svg/github.svg');
+}
+
+.linkedin {
+  background-image: url('/assets/images/svg/linkedin.svg');
+}
+
+
+.social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.web {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 40px;
+  background-image: url('/assets/images/logo/wachiii-menu.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  filter: var(--filter-inverted-value);
+}
+
+.web:hover {
+  opacity: 0.8;
+}
+
+.follow {
+  padding: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  border: 1px dashed #787878;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: var(--foreground);
+  width: 200px;
+}
+a {
+  text-decoration: underline;
+  color: var(--foreground);
+  transition: all 0.3s ease;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+a:hover {
+  color: #ebaa12;
+}
+
+.highlight {
+  font-family: 'BarlowCondensed', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--foreground);
+}

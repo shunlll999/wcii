@@ -1,6 +1,11 @@
-export const dynamic = 'force-dynamic';
-import { Studio } from '@Components/builder/base/Studio';
+import styles from './layout.module.css'
 
 export default async function Builder() {
-  return <Studio />
+  return (
+    <div style={{ padding: 16 }}>
+      <div className={styles['frame-content']}>
+        <iframe src="/view/iframe-builder" style={{ padding: 0 }}></iframe>
+      </div>
+    </div>
+  )
 }

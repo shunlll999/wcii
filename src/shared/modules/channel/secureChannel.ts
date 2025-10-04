@@ -1,6 +1,6 @@
 import { DEFAULT_SECURE_CODE } from "../constants/channel.const";
 import { createReplayCache } from "./channel.cache";
-import { BaseMessage, SecureChannelOprions, SignedMessage } from "./channel.interface";
+import { BaseMessage, SecureChannelOptions, SignedMessage } from "./channel.interface";
 import { MessageHandler, Details } from "./channel.type";
 import { signMessage } from "./channel.util";
 import { logValidationError, validationMessage } from "./channel.validation";
@@ -15,7 +15,7 @@ import { logValidationError, validationMessage } from "./channel.validation";
 function createSecureChannel<T = unknown>(
   channelName: string,
   onMessage: MessageHandler<T>,
-  options: SecureChannelOprions = {}
+  options: SecureChannelOptions = {}
 ) {
   const {
     MAX_AGE_MS = DEFAULT_SECURE_CODE.MAX_AGE_MS,

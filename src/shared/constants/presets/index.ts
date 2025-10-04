@@ -6,7 +6,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Container',
     code: 'container-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'CropSquareOutlinedIcon'
   },
@@ -16,7 +16,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Column',
     code: 'column-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'ViewArrayOutlinedIcon'
   },
@@ -26,7 +26,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Text',
     code: 'text-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'TitleOutlinedIcon'
   },
@@ -36,7 +36,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Image',
     code: 'image-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'ImageRoundedIcon'
   },
@@ -46,7 +46,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Heading',
     code: 'heading-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'TextFieldsOutlinedIcon'
   },
@@ -56,7 +56,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for Link',
     code: 'link-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'LinkOutlinedIcon'
   },
@@ -66,7 +66,7 @@ export const PRESETS_MOCK = [
     description: 'This is a preset for List',
     code: 'video-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'OndemandVideoOutlinedIcon'
   },
@@ -79,7 +79,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Form',
     code: 'form-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'ViewListOutlinedIcon'
   },
@@ -89,7 +89,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Input',
     code: 'input-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'RttOutlinedIcon'
   },
@@ -99,7 +99,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Select',
     code: 'select-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'PlaylistAddCheckOutlinedIcon'
   },
@@ -109,7 +109,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Textarea',
     code: 'textarea-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'TextRotationNoneOutlinedIcon'
   },
@@ -119,7 +119,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Button',
     code: 'button-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'PinOutlinedIcon'
   },
@@ -129,7 +129,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Checkbox',
     code: 'checkbox-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'CheckBoxOutlinedIcon'
   },
@@ -139,7 +139,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Radio',
     code: 'radio-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'RadioButtonCheckedOutlinedIcon'
   },
@@ -149,7 +149,7 @@ export const PRESETS_MOCK_FORM = [
     description: 'This is a preset for Label',
     code: 'label-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'CommentBankOutlinedIcon'
   }
@@ -162,7 +162,7 @@ export const PRESETS_MOCK_EXTRA = [
     description: 'This is a preset for Navbar',
     code: 'navbar-code',
     props: {},
-    metadata: [],
+    metadata: {},
     children: [],
     icon: 'ArtTrackOutlinedIcon'
   }

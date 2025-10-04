@@ -57,7 +57,7 @@
   background: var(--node-background);
   outline-offset: 4px;
   transition: border 0.3s ease;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .node:hover {
@@ -66,6 +66,21 @@
   transition: border 0.3s ease;
   box-shadow: var(--gradient-shadow-node);
   transition: box-shadow 0.3s ease;
+}
+
+.node-action {
+  border: 1px dashed var(--border-drop-target);
+}
+
+.node-controller {
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: -30px;
+  left: 0;
+  height: 30px;
+  padding: 4px;
+  background-color: var(--border-drop-target);
 }
 
 .btn {
