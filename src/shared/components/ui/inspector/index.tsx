@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
@@ -86,8 +87,6 @@ export function Inspector({ instance }: { instance: any }) {
       delete inspectorChannelRef.current.inspector;
     };
   }, []);
-
-  console.log('presetData', presetData);
 
   return (
     <div className={`inspector-container ${isOpen ? 'open' : ''}`}>

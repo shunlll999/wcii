@@ -34,6 +34,7 @@ import { withMetadata } from '@Shared/controllers/meta/withMatadata';
 import classname from 'classnames';
 import { useLayout } from '@Shared/hooks/useLayout';
 import { positionStore } from '@Shared/stores/layoutStore';
+import pkg from '../../../../package.json';
 
 const style = {
   position: 'absolute',
@@ -47,6 +48,12 @@ const style = {
   p: 4,
 };
 
+type packageType = {
+  name: string;
+  version: string;
+  private: boolean;
+};
+
 type NavigationProps = {
   presets: PresetResponseType;
 };
@@ -55,7 +62,7 @@ type NavigationMetaDataType = NavigationProps & { meta: Metadata };
 
 const NavigationBase: React.FC<NavigationMetaDataType> = ({
   presets,
-  meta,
+  meta
 }: NavigationMetaDataType) => {
   const { data } = presets;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -161,11 +168,9 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
                   {item.data.map(data => {
                     return (
                       <div
-                        // draggable
                         key={data.id}
                         className={styles['section-content']}
                         onClick={() => onSelectedCode(data)}
-                        // onDragStart={e => onDragStart(e, data)}
                       >
                         <div>
                           <div>{icon[data?.icon || 'CropSquareOutlinedIcon']}</div>
@@ -179,7 +184,7 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
             ))}
       </div>
        <div>
-        <div className={styles['section-version']}>{`:: wcii version DEMO (${new Date().toLocaleString()})`}</div>
+        <div className={styles['section-version']}>{`:: ${pkg.name} version ${pkg.version} :: ${pkg.phase}`}</div>
       </div>
       {reactData.template && (
         <StringCompiler

@@ -2,6 +2,7 @@
   "name": "wcii",
   "version": "0.1.0",
   "private": true,
+  "phase": "DEMO",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

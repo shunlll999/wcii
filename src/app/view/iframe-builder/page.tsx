@@ -3,7 +3,7 @@
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, {  useEffect, useRef, useState } from 'react';
+import React, {  forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
@@ -31,57 +31,75 @@ function getTagName(value: unknown) {
   return Object.prototype.toString.call(value).replace(/^\[object |\]$/g, "").toLocaleLowerCase();
 }
 
+// สมมติว่ามี type แบบนี้
+type ElementControlProps = LayoutNode;
+export type ElementControlHandle = {
+  onWidgetAction: () => void;
+  onActiveNode: (value: boolean) => void;
+};
 
-const ElementControl = ({ children, mapData }: LayoutNode) => {
-  //--------------- CHANNEL --------------- //
+
+const ElementControl = forwardRef<ElementControlHandle, ElementControlProps>(
+  ({ children, mapData }, ref) => {
+    //--------------- CHANNEL --------------- //
     const inspectorChannelRef = useRef<
-    Record<string, SecureChannelTypeWithRequiredPayload | undefined>
-  >({});
-  const onWidgetAction = () => {
-    const { data, meta, propName, node } = mapData
-    const propsData = {
-      type: getTagName(data),
-      value: data
-    }
+      Record<string, SecureChannelTypeWithRequiredPayload | undefined>
+    >({});
+    const [activeNode, setActiveNode] = useState<boolean>(false);
 
-    const newMeta = {
-      ...meta,
-      props: {
-        [propName]: propsData
-      }
-    }
+    // ฟังก์ชันที่จะ expose ออกไป
+    const onWidgetAction = () => {
+      const { data, meta, propName, node } = mapData;
 
-    const applyNode = {
-      ...node,
-      metadata: newMeta,
-      props: {
-        ...node.props,
-        [propName]: propsData
-      }
-    }
-    inspectorChannelRef.current.inspector?.send(newMeta.name, PresetAction.OPEN_INSPECTOR, applyNode);
-  }
+      const propsData = {
+        type: getTagName(data),
+        value: data
+      };
 
-  useEffect(() => {
-    const inspectorChannel = createSecureChannel(
-      CHANNEL_NAME.INSPECTOR,
-      (message: BaseMessage) => {
-        console.log('view', message);
-      }
-    );
-    inspectorChannelRef.current.inspector = inspectorChannel;
-    return () => {
-      inspectorChannel?.close();
-      delete inspectorChannelRef.current.inspector;
+      const newMeta = {
+        ...meta,
+        props: {
+          [propName]: propsData
+        }
+      };
+
+      const applyNode = {
+        ...node,
+        metadata: newMeta,
+        props: {
+          ...node.props,
+          [propName]: propsData
+        }
+      };
+
+      console.log('applyNode::>>>', applyNode);
+
+      inspectorChannelRef.current.inspector?.send(
+        newMeta.name,
+        PresetAction.OPEN_INSPECTOR,
+        applyNode
+      );
     };
-  }, []);
 
-  return (
-    <div className='node-action' onClick={onWidgetAction}>
-      {children}
-    </div>
-  )
-}
+    const onActiveNode = (value: boolean) => {
+      setActiveNode(value)
+    }
+
+    // expose method ให้ parent เรียกได้ผ่าน ref
+    useImperativeHandle(ref, () => ({
+      onWidgetAction,
+      onActiveNode
+    }));
+
+    return (
+      <div className={activeNode ? 'node-action' : ''} onClick={onWidgetAction}>
+        {children}
+      </div>
+    );
+  }
+);
+
+ElementControl.displayName = 'ElementControl';
 
 export default function IframeCanvasPage() {
   const [layout, setLayout] = useState<PresetType[]>([]);
@@ -370,6 +388,8 @@ export default function IframeCanvasPage() {
     { title: 'ContactAAA', href: '#' }
   ];
 
+  const elementControlRef = useRef<ElementControlHandle>(null);
+
   const elementObject = (node: PresetType) => ({
     'text-code':  <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
     'button-code': <button>Button</button>,
@@ -383,7 +403,7 @@ export default function IframeCanvasPage() {
     //       </div>
     'container-code': <Container />,
     'column-code': <Column />,
-    'navbar-code': <ElementControl mapData={{ meta: NavigationBar.metadata, data: links, propName: 'navigationLinks', node }}><NavigationBar meta={NavigationBar.metadata} linkProps={links} /></ElementControl>
+    'navbar-code': <ElementControl ref={elementControlRef} mapData={{ meta: NavigationBar.metadata, data: links, propName: 'navigationLinks', node }}><NavigationBar meta={NavigationBar.metadata} linkProps={links} /></ElementControl>
 
   })
 
