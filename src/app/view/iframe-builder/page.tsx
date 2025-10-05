@@ -3,7 +3,7 @@
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, {  forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, {  forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
@@ -15,6 +15,8 @@ import { Column, Container, NavigationBar, NavigationPropsType } from '@Shared/c
 import { positionStore } from '@Shared/stores/layoutStore';
 import { Metadata } from '@Shared/controllers/meta/withMatadata.type';
 import { PresetAction } from '@Shared/types/dispatch.type';
+import { useSecureChannelCmo } from '@Shared/hooks';
+import { BuilderContext } from '@Components/builder/contexts/builderContext';
 
 
 type LayoutNode = {
@@ -112,6 +114,8 @@ export default function IframeCanvasPage() {
   const navigationChannelRef = useRef<
     Record<string, SecureChannelTypeWithRequiredPayload | undefined>
   >({});
+
+  const { channels } = useContext(BuilderContext);
 
   // ------------------------ UTILITIES ------------------------ //
 
@@ -331,14 +335,22 @@ export default function IframeCanvasPage() {
       return [...newLayout];
     });
 
-    const navigationChannel = navigationChannelRef.current.navigation;
-    navigationChannel?.send('iframe', PresetAction.UPDATE, payload);
+    // const navigationChannel = navigationChannelRef.current.navigation;
+    channels.NAVIGATION?.send('iframe', PresetAction.UPDATE, payload);
   };
 
   const onSignalAddElement = (node: PresetType) => {
     positionStore.getState().setLayout([...layout, { ...node, sourceId: uuid() }]);
     setLayout(prevLayout => [...prevLayout, { ...node, sourceId: uuid() }]);
   };
+
+  // useSecureChannelCmo({
+  //   channelName: CHANNEL_NAME.NAVIGATION,
+  //   factoryMessage: (message: BaseMessage) => {
+  //     onSignalAddElement(message.payload);
+  //     // console.log(message);
+  //   },
+  // });
 
   // ------------------------ BIND EVENTS ------------------------ //
   useEffect(() => {
@@ -352,17 +364,21 @@ export default function IframeCanvasPage() {
     dropzone.addEventListener('drop', onDrop, { signal });
     dropzone.addEventListener('dragleave', onDragLeave, { signal });
 
-    const navigationChannel = createSecureChannel(
-      CHANNEL_NAME.NAVIGATION,
-      (message: BaseMessage) => {
-        onSignalAddElement(message.payload);
-      }
-    );
+    // const navigationChannel = createSecureChannel(
+    //   CHANNEL_NAME.NAVIGATION,
+    //   (message: BaseMessage) => {
+    //     onSignalAddElement(message.payload);
+    //   }
+    // );
 
-    navigationChannelRef.current.navigation = navigationChannel;
+    channels.NAVIGATION?.onMessage((message: BaseMessage) => {
+      onSignalAddElement(message.payload);
+    })
+
+    // navigationChannelRef.current.navigation = navigationChannel;
     return () => {
-      navigationChannel?.close();
-      delete navigationChannelRef.current.navigation;
+      // navigationChannel?.close();
+      // delete navigationChannelRef.current.navigation;
       abortController.abort();
       dropzone.removeEventListener('dragover', onDragOver);
       dropzone.removeEventListener('drop', onDrop);
@@ -393,7 +409,7 @@ export default function IframeCanvasPage() {
   const elementObject = (node: PresetType) => ({
     'text-code':  <p>{node.props?.text?.toString() ?? <span>Editable Text ✏️</span>}</p>,
     'button-code': <button>Button</button>,
-    'image-code': <img width="100%" src="https://www.dpreview.com/files/p/articles/3912995929/Krobus-cat-sony-50-150-f2-gm.jpeg" alt="placeholder" />,
+    'image-code': <img width="100%" src="/assets/images/jpg/taOSnap.png" alt="placeholder" />,
     // 'container-code': <div
     //         className="node"
     //         style={{ background: 'blue' }}

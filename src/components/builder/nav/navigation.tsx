@@ -19,7 +19,7 @@ import CommentBankOutlinedIcon from '@mui/icons-material/CommentBankOutlined';
 import ArtTrackOutlinedIcon from '@mui/icons-material/ArtTrackOutlined';
 import { PresetResponseType, PresetType } from '@Shared/types';
 import styles from './navigation.module.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import StringCompiler from '@Components/complier/StringCompiler';
 import { Box, Modal, Typography } from '@mui/material';
 import {
@@ -35,6 +35,7 @@ import classname from 'classnames';
 import { useLayout } from '@Shared/hooks/useLayout';
 import { positionStore } from '@Shared/stores/layoutStore';
 import pkg from '../../../../package.json';
+import { BuilderContext } from '../contexts/builderContext';
 
 const style = {
   position: 'absolute',
@@ -79,6 +80,8 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
     error: '',
   });
 
+  const { channels } = useContext(BuilderContext);
+
   const onSelectedCode = async (data: PresetType) => {
     // console.log('Selected', data);
     // const response = await getPresetByCode(data.code, data.id);
@@ -89,8 +92,9 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
     // } else {
     //   setReactData({ ...response });
     // }
-    const navigationChannel = navigationChannelRef.current.navigation;
-    navigationChannel?.send(meta.name, PresetAction.ADD, data);
+    // console.log('meta.name', meta.name);
+    // const navigationChannel = navigationChannelRef.current.navigation;
+    channels.NAVIGATION?.send(meta.name, PresetAction.ADD, data);
   };
 
   const icon = {
@@ -125,19 +129,6 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
       default: break;
     }
   }
-
-  useEffect(() => {
-    const channel = createSecureChannel(CHANNEL_NAME.NAVIGATION, (message: BaseMessage) => {
-      console.log('message.from', message.from);
-    });
-
-    navigationChannelRef.current.navigation = channel;
-
-    return () => {
-      channel?.close();
-      delete navigationChannelRef.current.navigation;
-    };
-  }, []);
 
   const mapKeys = {
     basic: isBasicOpen,

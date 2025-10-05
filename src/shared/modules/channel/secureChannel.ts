@@ -1,9 +1,9 @@
-import { DEFAULT_SECURE_CODE } from "../constants/channel.const";
-import { createReplayCache } from "./channel.cache";
-import { BaseMessage, SecureChannelOptions, SignedMessage } from "./channel.interface";
-import { MessageHandler, Details } from "./channel.type";
-import { signMessage } from "./channel.util";
-import { logValidationError, validationMessage } from "./channel.validation";
+import { DEFAULT_SECURE_CODE } from '../constants/channel.const';
+import { createReplayCache } from './channel.cache';
+import { BaseMessage, SecureChannelOptions, SignedMessage } from './channel.interface';
+import { MessageHandler, Details } from './channel.type';
+import { signMessage } from './channel.util';
+import { logValidationError, validationMessage } from './channel.validation';
 
 /**
  *
@@ -14,7 +14,7 @@ import { logValidationError, validationMessage } from "./channel.validation";
  */
 function createSecureChannel<T = unknown>(
   channelName: string,
-  onMessage: MessageHandler<T>,
+  onMessage?: MessageHandler<T>,
   options: SecureChannelOptions = {}
 ) {
   const {
@@ -34,18 +34,51 @@ function createSecureChannel<T = unknown>(
     const message = e.data;
 
     try {
-      const validation = await validationMessage(message, replayCache, [MAX_AGE_MS, MAX_FUTURE_SKEW_MS]);
+      const validation = await validationMessage(message, replayCache, [
+        MAX_AGE_MS,
+        MAX_FUTURE_SKEW_MS,
+      ]);
       if (!validation.valid) {
-        logValidationError(validation.error, channelName, message, validation.details as Details | undefined);
+        logValidationError(
+          validation.error,
+          channelName,
+          message,
+          validation.details as Details | undefined
+        );
         return;
       }
 
       replayCache.add(message.messageId);
-      onMessage(message);
+      onMessage?.(message);
     } catch (error) {
       console.error(`[${channelName}] 💥 Processing error:`, error, message);
     }
   };
+
+  async function onChannelMessage(handler: MessageHandler<T>) {
+    bc.onmessage = async (e: MessageEvent<SignedMessage<T>>) => {
+      try {
+        const validation = await validationMessage(e.data, replayCache, [
+          MAX_AGE_MS,
+          MAX_FUTURE_SKEW_MS,
+        ]);
+        if (!validation.valid) {
+          logValidationError(
+            validation.error,
+            channelName,
+            e.data,
+            validation.details as Details | undefined
+          );
+          return;
+        }
+
+        replayCache.add(e.data.messageId);
+        handler(e.data);
+      } catch (error) {
+        console.error(`[${channelName}] 💥 Processing error:`, error, e.data);
+      }
+    };
+  }
 
   async function send(from: string, type: string, payload: T): Promise<void> {
     const base: BaseMessage<T> = {
@@ -54,7 +87,7 @@ function createSecureChannel<T = unknown>(
       type,
       payload,
       timestamp: Date.now(),
-    }
+    };
 
     bc.postMessage(await signMessage(base));
   }
@@ -67,6 +100,10 @@ function createSecureChannel<T = unknown>(
   return {
     send,
     close,
+    onMessage: onChannelMessage,
+    attach(handler: (msg: SignedMessage<T>) => void): void {
+      bc.onmessage = (e: MessageEvent<SignedMessage<T>>) => handler(e.data);
+    },
   };
 }
 
