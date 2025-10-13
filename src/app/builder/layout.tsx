@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from './layout.module.css';
 import { Navigation } from '@Components/builder/base/Navigation';
 import { ThemeRegistry } from '@Components/builder/base/ThemeRegistry';
@@ -16,8 +17,8 @@ export default async function BuilderLayout({ children }: BuilderLayoutProps) {
       <ClientProviders>
         <div className={styles.layout}>
           <header className={styles.header}>
-            <div>logo</div>
-            <div>wcii builder</div>
+            <img src="/assets/images/logo/wcilogo.png" className={styles.logo} alt="wcii-logo" />
+            <div className={styles.title}>builder</div>
           </header>
           <main className={styles.main}>
             <nav className={styles.nav}>

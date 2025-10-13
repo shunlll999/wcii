@@ -19,7 +19,7 @@ function logValidationError<T>(
 ) {
   const errorMessage = {
     [MessageValidationError.INVALID_SIGNATURE]: `❌ Invalid signature for message`,
-    [MessageValidationError.TOO_DOLD]: `⏱️ Message is too old (age: ${details?.age}ms)`,
+    [MessageValidationError.TOO_OLD]: `⏱️ Message is too old (age: ${details?.age}ms)`,
     [MessageValidationError.TOO_FUTURE]: `⏳ Message is too far in the future (skew: ${details?.skew}ms)`,
     [MessageValidationError.MISSING_MESSAGE_ID]: `❗ Message is missing messageId`,
     [MessageValidationError.DUPLICATE_MESSAGE]: `🔁 Duplicate message detected`,
@@ -44,7 +44,7 @@ async function validationMessage<T>(
   const validationObject = {
     [DEFAULT_SECURE_CODE.MAX_AGE_MS]: (option: number) => {
        if (age > option) {
-        return { valid: false, error: MessageValidationError.TOO_DOLD, details: { age, maxAge: option } };
+        return { valid: false, error: MessageValidationError.TOO_OLD, details: { age, maxAge: option } };
       }
     },
     [DEFAULT_SECURE_CODE.MAX_FUTURE_SKEW_MS]: (option: number) => {

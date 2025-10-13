@@ -36,7 +36,7 @@ export const ClientProviders = ({ children }: ClientProviderProps) => {
       inspectorChannel.close();
       storeChannel.close();
     };
-  }, [])
+  }, [componentChannel, inspectorChannel, navigationChannel, pageChannel, presetChannel, storeChannel])
 
   return (
     <BuilderContext.Provider

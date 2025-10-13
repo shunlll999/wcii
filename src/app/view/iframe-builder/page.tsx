@@ -3,105 +3,18 @@
 'use client';
 import type { PresetType } from '@Shared/types';
 import { v4 as uuid } from 'uuid';
-import React, {  forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, {  useContext, useEffect, useRef, useState } from 'react';
 import './iframe.css';
 import {
   BaseMessage,
-  createSecureChannel,
-  SecureChannelTypeWithRequiredPayload,
 } from '@Shared/modules/channel';
-import { CHANNEL_NAME } from '@Shared/constants';
 import { Column, Container, NavigationBar, NavigationPropsType } from '@Shared/components/ui';
 import { positionStore } from '@Shared/stores/layoutStore';
-import { Metadata } from '@Shared/controllers/meta/withMatadata.type';
 import { PresetAction } from '@Shared/types/dispatch.type';
-import { useSecureChannelCmo } from '@Shared/hooks';
 import { BuilderContext } from '@Components/builder/contexts/builderContext';
+import { ElementControl, ElementControlHandle } from '@Components/builder/base/ElementControl';
 
 
-type LayoutNode = {
-  children: React.ReactNode,
-  mapData: {
-    meta: Metadata,
-    data: unknown,
-    propName: string,
-    node: PresetType,
-  },
-};
-
-function getTagName(value: unknown) {
-  return Object.prototype.toString.call(value).replace(/^\[object |\]$/g, "").toLocaleLowerCase();
-}
-
-// สมมติว่ามี type แบบนี้
-type ElementControlProps = LayoutNode;
-export type ElementControlHandle = {
-  onWidgetAction: () => void;
-  onActiveNode: (value: boolean) => void;
-};
-
-
-const ElementControl = forwardRef<ElementControlHandle, ElementControlProps>(
-  ({ children, mapData }, ref) => {
-    //--------------- CHANNEL --------------- //
-    const inspectorChannelRef = useRef<
-      Record<string, SecureChannelTypeWithRequiredPayload | undefined>
-    >({});
-    const [activeNode, setActiveNode] = useState<boolean>(false);
-
-    // ฟังก์ชันที่จะ expose ออกไป
-    const onWidgetAction = () => {
-      const { data, meta, propName, node } = mapData;
-
-      const propsData = {
-        type: getTagName(data),
-        value: data
-      };
-
-      const newMeta = {
-        ...meta,
-        props: {
-          [propName]: propsData
-        }
-      };
-
-      const applyNode = {
-        ...node,
-        metadata: newMeta,
-        props: {
-          ...node.props,
-          [propName]: propsData
-        }
-      };
-
-      console.log('applyNode::>>>', applyNode);
-
-      inspectorChannelRef.current.inspector?.send(
-        newMeta.name,
-        PresetAction.OPEN_INSPECTOR,
-        applyNode
-      );
-    };
-
-    const onActiveNode = (value: boolean) => {
-      setActiveNode(value)
-    }
-
-    // expose method ให้ parent เรียกได้ผ่าน ref
-    useImperativeHandle(ref, () => ({
-      onWidgetAction,
-      onActiveNode
-    }));
-
-    return (
-      <div className={activeNode ? 'node-action' : ''} onClick={onWidgetAction}>
-        {children}
-      </div>
-    );
-  }
-);
-
-ElementControl.displayName = 'ElementControl';
 
 export default function IframeCanvasPage() {
   const [layout, setLayout] = useState<PresetType[]>([]);
@@ -111,12 +24,7 @@ export default function IframeCanvasPage() {
   const hoverNodeRef = useRef<HTMLElement | null>(null);
 
   // ------------------------ CHANNEL ------------------------ //
-  const navigationChannelRef = useRef<
-    Record<string, SecureChannelTypeWithRequiredPayload | undefined>
-  >({});
-
   const { channels } = useContext(BuilderContext);
-
   // ------------------------ UTILITIES ------------------------ //
 
   const findNodePath = (
@@ -335,7 +243,6 @@ export default function IframeCanvasPage() {
       return [...newLayout];
     });
 
-    // const navigationChannel = navigationChannelRef.current.navigation;
     channels.NAVIGATION?.send('iframe', PresetAction.UPDATE, payload);
   };
 
@@ -344,13 +251,6 @@ export default function IframeCanvasPage() {
     setLayout(prevLayout => [...prevLayout, { ...node, sourceId: uuid() }]);
   };
 
-  // useSecureChannelCmo({
-  //   channelName: CHANNEL_NAME.NAVIGATION,
-  //   factoryMessage: (message: BaseMessage) => {
-  //     onSignalAddElement(message.payload);
-  //     // console.log(message);
-  //   },
-  // });
 
   // ------------------------ BIND EVENTS ------------------------ //
   useEffect(() => {
@@ -364,21 +264,12 @@ export default function IframeCanvasPage() {
     dropzone.addEventListener('drop', onDrop, { signal });
     dropzone.addEventListener('dragleave', onDragLeave, { signal });
 
-    // const navigationChannel = createSecureChannel(
-    //   CHANNEL_NAME.NAVIGATION,
-    //   (message: BaseMessage) => {
-    //     onSignalAddElement(message.payload);
-    //   }
-    // );
 
     channels.NAVIGATION?.onMessage((message: BaseMessage) => {
       onSignalAddElement(message.payload);
     })
 
-    // navigationChannelRef.current.navigation = navigationChannel;
     return () => {
-      // navigationChannel?.close();
-      // delete navigationChannelRef.current.navigation;
       abortController.abort();
       dropzone.removeEventListener('dragover', onDragOver);
       dropzone.removeEventListener('drop', onDrop);

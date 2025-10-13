@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 import CropSquareOutlinedIcon from '@mui/icons-material/CropSquareOutlined';
 import ViewArrayOutlinedIcon from '@mui/icons-material/ViewArrayOutlined';
@@ -19,41 +17,14 @@ import CommentBankOutlinedIcon from '@mui/icons-material/CommentBankOutlined';
 import ArtTrackOutlinedIcon from '@mui/icons-material/ArtTrackOutlined';
 import { PresetResponseType, PresetType } from '@Shared/types';
 import styles from './navigation.module.css';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import StringCompiler from '@Components/complier/StringCompiler';
-import { Box, Modal, Typography } from '@mui/material';
-import {
-  BaseMessage,
-  createSecureChannel,
-  SecureChannelTypeWithRequiredPayload,
-} from '@Shared/modules/channel';
-import { CHANNEL_NAME } from '@Shared/constants';
+import React, { useContext, useState } from 'react';
 import { PresetAction } from '@Shared/types/dispatch.type';
 import { Metadata } from '@Shared/controllers/meta/withMatadata.type';
 import { withMetadata } from '@Shared/controllers/meta/withMatadata';
 import classname from 'classnames';
 import { useLayout } from '@Shared/hooks/useLayout';
-import { positionStore } from '@Shared/stores/layoutStore';
 import pkg from '../../../../package.json';
 import { BuilderContext } from '../contexts/builderContext';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
-type packageType = {
-  name: string;
-  version: string;
-  private: boolean;
-};
 
 type NavigationProps = {
   presets: PresetResponseType;
@@ -63,37 +34,17 @@ type NavigationMetaDataType = NavigationProps & { meta: Metadata };
 
 const NavigationBase: React.FC<NavigationMetaDataType> = ({
   presets,
-  meta
+  meta,
 }: NavigationMetaDataType) => {
   const { data } = presets;
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBasicOpen, setIsBasicOpen] = useState<string>('');
   const [isFormOpen, setIsFormOpen] = useState<string>('');
   const [isExtraOpen, setIsExtraOpen] = useState<string>('');
   const hierarchies = useLayout();
-  const navigationChannelRef = useRef<
-    Record<string, SecureChannelTypeWithRequiredPayload | undefined>
-  >({});
-  const [reactData, setReactData] = useState<{ template: string; code: string; error?: string }>({
-    template: '',
-    code: '',
-    error: '',
-  });
 
   const { channels } = useContext(BuilderContext);
 
   const onSelectedCode = async (data: PresetType) => {
-    // console.log('Selected', data);
-    // const response = await getPresetByCode(data.code, data.id);
-    // console.log(response);
-    // if (response.error) {
-    //   setIsModalOpen(true);
-    //   setReactData({ ...response });
-    // } else {
-    //   setReactData({ ...response });
-    // }
-    // console.log('meta.name', meta.name);
-    // const navigationChannel = navigationChannelRef.current.navigation;
     channels.NAVIGATION?.send(meta.name, PresetAction.ADD, data);
   };
 
@@ -116,19 +67,27 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
     ArtTrackOutlinedIcon: <ArtTrackOutlinedIcon fontSize="large" />,
   } as { [key: string]: React.ReactNode };
 
-  const onDragStart = (event: React.DragEvent<HTMLDivElement>, item: PresetType) => {
-    event.dataTransfer.setData('application/x-builder', JSON.stringify(item));
-    event.dataTransfer.effectAllowed = 'copy';
-  };
-
-  const onSectionController = (key:string) => {
+  const onSectionController = (key: string) => {
     switch (key) {
-      case 'basic': setIsBasicOpen(isBasicOpen === '' ? 'open' : ''); setIsFormOpen(''); setIsExtraOpen(''); break;
-      case 'form': setIsFormOpen(isFormOpen === 'open' ? '' : 'open'); setIsBasicOpen('');  setIsExtraOpen('');break;
-      case 'extra': setIsExtraOpen(isExtraOpen === 'open' ? '' : 'open'); setIsFormOpen(''); setIsBasicOpen('');break;
-      default: break;
+      case 'basic':
+        setIsBasicOpen(isBasicOpen === '' ? 'open' : '');
+        setIsFormOpen('');
+        setIsExtraOpen('');
+        break;
+      case 'form':
+        setIsFormOpen(isFormOpen === 'open' ? '' : 'open');
+        setIsBasicOpen('');
+        setIsExtraOpen('');
+        break;
+      case 'extra':
+        setIsExtraOpen(isExtraOpen === 'open' ? '' : 'open');
+        setIsFormOpen('');
+        setIsBasicOpen('');
+        break;
+      default:
+        break;
     }
-  }
+  };
 
   const mapKeys = {
     basic: isBasicOpen,
@@ -141,7 +100,9 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
       <div className={styles['section-hierarchy']}>
         <div className={styles['section-header']}>Hierarchy</div>
         <ul className={styles['section-hierarchy-list']}>
-        {hierarchies.map((item) => <li key={item.sourceId}>{item.name}</li>)}
+          {hierarchies.map(item => (
+            <li key={item.sourceId}>{item.name}</li>
+          ))}
         </ul>
       </div>
       <div>
@@ -150,12 +111,21 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
             .sort(([, a], [, b]) => a.seq - b.seq)
             .map(([key, item]) => (
               <div key={key}>
-                <div className={styles['section-header']} onClick={() => onSectionController(key.toLocaleLowerCase())}>{key}</div>
-                <div className={classname(
-                  styles['section-item'],
-                  styles['section-controller'],
-                  styles[`${key.toLocaleLowerCase()}-${mapKeys[key.toLocaleLowerCase() as keyof typeof mapKeys]}`]
-                )}>
+                <div
+                  className={styles['section-header']}
+                  onClick={() => onSectionController(key.toLocaleLowerCase())}
+                >
+                  {key}
+                </div>
+                <div
+                  className={classname(
+                    styles['section-item'],
+                    styles['section-controller'],
+                    styles[
+                      `${key.toLocaleLowerCase()}-${mapKeys[key.toLocaleLowerCase() as keyof typeof mapKeys]}`
+                    ]
+                  )}
+                >
                   {item.data.map(data => {
                     return (
                       <div
@@ -174,31 +144,11 @@ const NavigationBase: React.FC<NavigationMetaDataType> = ({
               </div>
             ))}
       </div>
-       <div>
-        <div className={styles['section-version']}>{`:: ${pkg.name} version ${pkg.version} :: ${pkg.phase}`}</div>
+      <div>
+        <div
+          className={styles['section-version']}
+        >{`:: ${pkg.name} version ${pkg.version} :: ${pkg.phase}`}</div>
       </div>
-      {reactData.template && (
-        <StringCompiler
-          source={reactData.template}
-          props={{
-            className: {
-              container: styles['section-header'],
-              paragraph: styles['section-content'],
-            },
-            children: reactData.code,
-          }}
-        />
-      )}
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" color="red">
-            Error
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {reactData.error}
-          </Typography>
-        </Box>
-      </Modal>
     </div>
   );
 };

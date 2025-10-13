@@ -9,6 +9,7 @@
   background-color: var(--gray-lt-alpha-100);
   padding: 16px;
   transition: all 0.5s cubic-bezier(0.83, 0, 0.17, 1);
+  backdrop-filter: blur(15px);
 }
 
 .inspector-container.open {
