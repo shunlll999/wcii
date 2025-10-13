@@ -22,6 +22,7 @@
 
 .section-hierarchy {
   height: 100%;
+  overflow: auto;
 }
 
 .section-controller {
