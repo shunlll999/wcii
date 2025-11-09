@@ -23,7 +23,7 @@ const Preview = () => {
     'image-code': (
       <img
         width="100%"
-        src="https://www.dpreview.com/files/p/articles/3912995929/Krobus-cat-sony-50-150-f2-gm.jpeg"
+        src="/assets/images/jpg/taOSnap.png"
         alt="placeholder"
       />
     ),

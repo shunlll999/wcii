@@ -16,8 +16,17 @@
   right: 0;
 }
 
+.inspector-item-list {
+  margin-top: 16px;
+}
+
 .props-list {
   margin-top: 4px;
+}
+
+.props-items .MuiFormControl-root{
+  margin-top: 8px;
+  /* width: 100%; */
 }
 
 .methods-list {
